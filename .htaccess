@@ -1,0 +1,12 @@
+# ── Redirect old WordPress-style URLs to new pages ──────────────────
+Redirect 301 /food/ /food_menu.html
+Redirect 301 /food /food_menu.html
+Redirect 301 /drinks/ /drink_menu.html
+Redirect 301 /drinks /drink_menu.html
+Redirect 301 /menu/ /food_menu.html
+Redirect 301 /menu /food_menu.html
+Redirect 301 /hours/ /hours.html
+Redirect 301 /hours /hours.html
+
+# ── Catch-all: any unknown URL goes to home ──────────────────────────
+ErrorDocument 404 /index.html

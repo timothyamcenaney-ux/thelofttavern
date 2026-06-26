@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hours &amp; Location — The Loft Tavern</title>
+  <meta name="description"
+    content="Hours, location, takeout info, and outside seating at The Loft Tavern in Ludlow, Vermont." />
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="The Loft Tavern" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.thelofttavern.com/hours.html" />
+  <meta property="og:title" content="Hours & Location — The Loft Tavern" />
+  <meta property="og:description"
+    content="Open Thu 3–9 · Fri–Sat 11:30–10 · Sun 11:30–9. Located at 300 Mountain Road, Ludlow VT — base of Okemo Mountain." />
+  <meta property="og:image" content="https://www.thelofttavern.com/images/logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAV — class="active" is on the Hours link here.
+       ============================================================ -->
+  <nav>
+    <div class="wrap nav-inner">
+      <a href="index.html" class="nav-logo"><img src="images/letsgetlofted.png" alt="The Loft Tavern"
+          class="nav-logo-img" /></a>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="food_menu.html">Food</a></li>
+        <li><a href="drink_menu.html">Drinks</a></li>
+        <li><a href="hours.html" class="active">Hours</a></li>
+        <li class="gift-cards">
+          <a href="https://app.squareup.com/gift/MLZ9HCJG33P9N/order" target="_blank" rel="noopener">🎁 Gift Cards</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="loft-status-bar"></div>
+  <script src="hours-status.js"></script>
+
+  <!-- ============================================================
+       PAGE CONTENT
+       ============================================================ -->
+  <main class="page-content">
+    <div class="wrap">
+
+      <!-- ── HOURS ──────────────────────────────────────────────── -->
+      <h1 class="section-title">Hours</h1>
+      <p class="section-sub">
+        Summer is here!
+        <!-- EDIT: adjust season dates as needed -->
+      </p>
+
+      <div class="hours-grid">
+
+        <div class="hours-card">
+          <h3>Monday</h3>
+          <div class="time">Closed</div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Tuesday</h3>
+          <div class="time">Closed</div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Wednesday</h3>
+          <div class="time">Closed</div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Thursday</h3>
+          <div class="time">3 PM – 9 PM</div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Friday</h3>
+          <div class="time">11:30 AM – 10 PM</div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Saturday</h3>
+          <div class="time">11:30 AM – 10 PM</div>
+        </div>
+
+        <div class="hours-card">
+          <h3>Sunday</h3>
+          <div class="time">11:30 AM – 9 PM</div>
+        </div>
+
+      </div>
+
+      <!-- ── ADDITIONAL INFO CARDS ──────────────────────────────── -->
+      <div class="info-grid">
+
+        <div class="info-card">
+          <h3>🥡 Takeout</h3>
+          <!-- EDIT: your actual takeout policy -->
+          <p>
+            Call-in takeout is available, based on kitchen volume. Our small kitchen works to prioritize in-house
+            guests, so during peak times takeout may not be available.
+          </p>
+          <p style="margin-top:.6rem;">
+            <a href="tel:+18029750322" class="btn btn-primary mt-1" style="font-size:.82rem; padding:.45rem 1.1rem;">
+              Call to Order
+            </a>
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>☀️ Outside Seating</h3>
+          <!-- EDIT: your actual outdoor seating details -->
+          <p>
+            Outdoor seating is available weather permitting — first come, first served.
+            No reservations for outside. Grab a spot, grab a drink. Leashed dogs welcome outside.
+          </p>
+          <p style="margin-top:.5rem; font-size:.82rem; color: var(--slate);">
+
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>📞 Contact</h3>
+          <p>
+            <!-- EDIT: your actual phone -->
+            <a href="tel:+18029750322" style="color: var(--amber); font-size:1.05rem; font-weight:500;">(802)
+              975-0322</a>
+          </p>
+          <p style="margin-top:.5rem;">
+            Best way to reach us is by phone during business hours.
+            <!-- EDIT: add email if you have one -->
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>📍 Getting Here</h3>
+          <address style="font-style:normal; font-size:.875rem; color:#4A4440; line-height:1.7;">
+            <!-- EDIT: your actual address and proximity note -->
+            300 Mountain Road<br />
+            Ludlow, VT 05149<br /><br />
+            Base of Okemo Mountain.<br />
+            Parking available on-site.
+          </address>
+          <a href="https://maps.apple.com/?q=The+Loft+Tavern+Ludlow+VT" class="btn btn-outline mt-2"
+            style="font-size:.78rem; padding:.4rem 1rem;" target="_blank" rel="noopener">
+            Get Directions
+          </a>
+        </div>
+
+      </div>
+
+      <!-- ── LARGE MAP ──────────────────────────────────────────── -->
+      <div class="big-map">
+        <!-- EDIT: paste your Google Maps embed iframe src here (same as footer) -->
+        <iframe src="https://www.google.com/maps?q=The+Loft+Tavern+Ludlow+VT&output=embed" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="The Loft Tavern on Google Maps" allowfullscreen>
+        </iframe>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============================================================
+       FOOTER — identical on every page.
+       ============================================================ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <h4>Hours</h4>
+          <p>
+            Mon – Weds: Closed<br />
+            Thursday: 3 PM – 9 PM<br />
+            Friday: 11:30 AM - 10 PM<br />
+            Saturday: 11:30 AM – 10 PM<br />
+            Sunday: 11:30 AM – 9 PM<br />
+            <span style="opacity:.55; font-size:.8rem;"></span>
+          </p>
+          <a href="hours.html" class="btn btn-outline mt-2" style="font-size:.78rem; padding:.4rem 1rem;">Full
+            Hours
+            &amp; Info</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Find Us</h4>
+          <address>
+            The Loft Tavern<br />
+            300 Mountain Road<br />
+            Ludlow, VT 05149<br /><br />
+            <a href="tel:+18029750322">(802) 975-0322</a><br /><br />
+            <a href="https://instagram.com/thelofttavern" target="_blank" rel="noopener">Instagram</a>
+            &nbsp;·&nbsp;
+            <a href="https://facebook.com/thelofttavern" target="_blank" rel="noopener">Facebook</a>
+          </address>
+        </div>
+
+        <div class="footer-col">
+          <h4>Map</h4>
+          <div class="footer-map">
+            <iframe src="https://www.google.com/maps?q=The+Loft+Tavern+Ludlow+VT&output=embed" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" title="The Loft Tavern location" allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-logo">The <span>Loft</span> Tavern</div>
+        <p class="footer-copy">&copy; 2026 The Loft Tavern · Ludlow, VT · Base of Okemo Mountain</p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

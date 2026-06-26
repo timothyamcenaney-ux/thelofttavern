@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Loft Tavern — Ludlow, Vermont</title>
+  <meta name="description" content="Barn-style bar and restaurant at the base of Okemo Mountain in Ludlow, Vermont." />
+  <!-- Open Graph — controls preview card on Facebook, iMessage, texts -->
+  <meta property="og:site_name" content="The Loft Tavern" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.thelofttavern.com/" />
+  <meta property="og:title" content="The Loft Tavern — Ludlow, Vermont" />
+  <meta property="og:description"
+    content="Bar and restaurant at the base of Okemo Mountain. Cold beer, smoked meats, great people. Open Thu–Sun." />
+  <meta property="og:image" content="https://www.thelofttavern.com/images/outside.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAV — same block on every page.
+       Mark the current page with class="active" on its <a> tag.
+       EDIT: Square gift card URL in the last <li>
+       ============================================================ -->
+  <nav>
+    <div class="wrap nav-inner">
+      <a href="index.html" class="nav-logo"><img src="images/letsgetlofted.png" alt="The Loft Tavern"
+          class="nav-logo-img" /></a>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="food_menu.html">Food</a></li>
+        <li><a href="drink_menu.html">Drinks</a></li>
+        <li><a href="hours.html">Hours</a></li>
+        <li class="gift-cards">
+          <!-- EDIT: replace # with your Square gift card purchase link -->
+          <a href="https://app.squareup.com/gift/MLZ9HCJG33P9N/order" target="_blank" rel="noopener">🎁 Gift Cards</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="loft-status-bar"></div>
+  <script src="hours-status.js"></script>
+
+  <!-- ============================================================
+       PAGE CONTENT
+       ============================================================ -->
+  <main class="page-content">
+    <div class="wrap">
+
+      <!-- ── HERO IMAGE (optional) ────────────────────────────────
+           Swap the gradient div below for a real photo:
+           <img src="images/hero.jpg" alt="The Loft Tavern" class="hero-img" />
+           Add to style.css: .hero-img { width:100%; height:340px; object-fit:cover; border-radius:6px; margin-bottom:2.5rem; }
+           Recommended: 900×400px JPEG, under 150KB
+           ──────────────────────────────────────────────────────── -->
+      <div style="width:100%; background:linear-gradient(160deg,#2B2017,#1C1814,#3A2B14);
+                  border-radius:6px; display:flex; flex-direction:column; align-items:center;
+                  justify-content:center; padding:2rem 1rem; margin-bottom:1rem;">
+        <img src="images/logo.png" alt="The Loft Tavern" style="height:300px; width:auto;" />
+        <div style="font-size:.9rem; opacity:.65; margin-top:.8rem; color:#F2EDE4;">Base of Okemo Mountain · Ludlow,
+          Vermont</div>
+      </div>
+
+      <!-- ── FOUR IMAGE + TEXT PANELS ─────────────────────────────
+           Each panel: replace the placeholder <div> with an <img> tag.
+           Example:
+             <img src="images/bar.jpg" alt="The bar at The Loft" class="panel-img" />
+           Recommended image size: 860×500px JPEG, under 120KB each.
+           Text: edit the <h2> and <p> inside each .panel block.
+           Add or remove panels by copying/deleting a .panel block.
+           ──────────────────────────────────────────────────────── -->
+
+      <div class="panels">
+
+        <!-- Panel 1 -->
+        <div class="panel">
+          <img src="images/bar.jpg" alt="Draft taps at The Loft Tavern" class="panel-img" />
+          <div class="panel-text">
+            <h2>The Bar</h2>
+            <!-- EDIT: your text -->
+            <p>
+              A proper Vermont bar — local drafts, cold cans, and a full well.
+
+            </p>
+          </div>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="panel">
+          <img src="images/food.jpg" alt="Smoked meats on the smoker at The Loft Tavern" class="panel-img" />
+          <div class="panel-text">
+            <h2>The Food</h2>
+            <!-- EDIT: your text -->
+            <p>
+              Smoked in-house, made from scratch. Brisket, pulled pork, burgers,
+              and loaded nachos.
+            </p>
+          </div>
+        </div>
+
+        <!-- Panel 3 -->
+        <div class="panel">
+          <img src="images/outside.jpg" alt="Back lawn outdoor seating at The Loft Tavern" class="panel-img" />
+          <div class="panel-text">
+            <h2>Outside Seating</h2>
+            <!-- EDIT: your text -->
+            <p>
+              Our back lawn is the place to be this summer. First come, first serve. Leashed dogs allowed outside only.
+            </p>
+          </div>
+        </div>
+
+        <!-- Panel 4 -->
+        <div class="panel">
+          <img src="images/team2.jpg" alt="The crew at The Loft Tavern" class="panel-img"
+            style="object-position: bottom;" />
+          <div class="panel-text">
+            <h2>The Crew</h2>
+            <!-- EDIT: your text -->
+            <p>
+              We've been the local hangout at the base of Okemo since we opened.
+              Regulars and first-timers get the same treatment — a cold drink with proper attire.
+            </p>
+          </div>
+        </div>
+
+      </div>
+      <!-- end .panels -->
+
+    </div>
+  </main>
+
+  <!-- ============================================================
+       FOOTER — identical on every page.
+       ============================================================ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <h4>Hours</h4>
+          <p>
+            Mon – Weds: Closed<br />
+            Thursday: 3 PM – 9 PM<br />
+            Friday: 11:30 AM - 10 PM<br />
+            Saturday: 11:30 AM – 10 PM<br />
+            Sunday: 11:30 AM – 9 PM<br />
+            <span style="opacity:.55; font-size:.8rem;"></span>
+          </p>
+          <a href="hours.html" class="btn btn-outline mt-2" style="font-size:.78rem; padding:.4rem 1rem;">Full
+            Hours
+            &amp; Info</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Find Us</h4>
+          <address>
+            The Loft Tavern<br />
+            300 Mountain Road<br />
+            Ludlow, VT 05149<br /><br />
+            <a href="tel:+18029750322">(802) 975-0322</a><br /><br />
+            <a href="https://instagram.com/thelofttavern" target="_blank" rel="noopener">Instagram</a>
+            &nbsp;·&nbsp;
+            <a href="https://facebook.com/thelofttavern" target="_blank" rel="noopener">Facebook</a>
+          </address>
+        </div>
+
+        <div class="footer-col">
+          <h4>Map</h4>
+          <div class="footer-map">
+            <iframe src="https://www.google.com/maps?q=The+Loft+Tavern+Ludlow+VT&output=embed" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" title="The Loft Tavern location" allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-logo">The <span>Loft</span> Tavern</div>
+        <p class="footer-copy">&copy; 2026 The Loft Tavern · Ludlow, VT · Base of Okemo Mountain</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

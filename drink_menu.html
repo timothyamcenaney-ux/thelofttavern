@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drink Menu — The Loft Tavern</title>
+  <meta name="description" content="Drink menu at The Loft Tavern, Ludlow Vermont. Draft beers, cocktails, wine, and more." />
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="The Loft Tavern" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.thelofttavern.com/drink_menu.html" />
+  <meta property="og:title" content="Drink Menu — The Loft Tavern" />
+  <meta property="og:description" content="Local drafts, cold cans, cocktails, and wine. The Loft Tavern drink menu — Ludlow, VT." />
+  <meta property="og:image" content="https://www.thelofttavern.com/images/bar.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAV — class="active" is on the Drinks link here.
+       ============================================================ -->
+  <nav>
+    <div class="wrap nav-inner">
+      <a href="index.html" class="nav-logo"><img src="images/letsgetlofted.png" alt="The Loft Tavern" class="nav-logo-img" /></a>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="food_menu.html">Food</a></li>
+        <li><a href="drink_menu.html" class="active">Drinks</a></li>
+        <li><a href="hours.html">Hours</a></li>
+        <li class="gift-cards">
+          <a href="https://app.squareup.com/gift/MLZ9HCJG33P9N/order" target="_blank" rel="noopener">🎁 Gift Cards</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="loft-status-bar"></div>
+  <script src="hours-status.js"></script>
+
+  <!-- ============================================================
+       PAGE CONTENT
+       ============================================================ -->
+  <main class="page-content">
+    <div class="wrap">
+
+      <h1 class="section-title centered">Drink Menu</h1>
+      <p class="section-sub" style="text-align:center; font-size:.85rem;">Summer 2026</p>
+
+      <!-- ── iMENUPRO EMBED ──────────────────────────────────────
+           Same process as food_menu.html:
+           1. Get embed code from iMenuPro for your drink menu
+           2. Delete the .embed-placeholder div
+           3. Paste your snippet inside .embed-wrap
+           ──────────────────────────────────────────────────────── -->
+      <div class="embed-wrap">
+        <script id="1c2e-1o" type="text/javascript" src="https://imenupro.com/!1c2e-1o"></script>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============================================================
+       FOOTER — identical on every page.
+       ============================================================ -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <h4>Hours</h4>
+          <p>
+            Mon – Weds: Closed<br />
+            Thursday: 3 PM – 9 PM<br />
+            Friday: 11:30 AM - 10 PM<br />
+            Saturday: 11:30 AM – 10 PM<br />
+            Sunday: 11:30 AM – 9 PM<br />
+            <span style="opacity:.55; font-size:.8rem;"></span>
+          </p>
+          <a href="hours.html" class="btn btn-outline mt-2" style="font-size:.78rem; padding:.4rem 1rem;">Full
+            Hours
+            &amp; Info</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Find Us</h4>
+          <address>
+            The Loft Tavern<br />
+            300 Mountain Road<br />
+            Ludlow, VT 05149<br /><br />
+            <a href="tel:+18029750322">(802) 975-0322</a><br /><br />
+            <a href="https://instagram.com/thelofttavern" target="_blank" rel="noopener">Instagram</a>
+            &nbsp;·&nbsp;
+            <a href="https://facebook.com/thelofttavern" target="_blank" rel="noopener">Facebook</a>
+          </address>
+        </div>
+
+        <div class="footer-col">
+          <h4>Map</h4>
+          <div class="footer-map">
+            <iframe
+              src="https://www.google.com/maps?q=The+Loft+Tavern+Ludlow+VT&output=embed"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="The Loft Tavern location"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-logo">The <span>Loft</span> Tavern</div>
+        <p class="footer-copy">&copy; 2026 The Loft Tavern · Ludlow, VT · Base of Okemo Mountain</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
