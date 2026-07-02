@@ -497,6 +497,11 @@ footer {
   display: block;
 }
 
+/* Bar photo is 2.2:1 — override to show full width of tap handles */
+.panel:first-child .panel-img {
+  aspect-ratio: 11/5;
+}
+
 /* Placeholder shown until you add real photos */
 .panel-img-placeholder {
   width: 100%;
