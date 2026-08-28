@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Specials</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -253,7 +253,7 @@
 
     .card-description {
       font-family: 'Lato', sans-serif;
-      font-weight: 300;
+      font-weight: 400;
       font-style: italic;
       color: #555;
       line-height: 1.45;
@@ -292,7 +292,7 @@
     /* These use vw so the preview scales with window */
     .specials-grid[data-count="1"] .card-header   { font-size: clamp(7px, 1.1vw, 9px); }
     .specials-grid[data-count="1"] .card-title     { font-size: clamp(12px, 2.8vw, 22px); }
-    .specials-grid[data-count="1"] .card-description{ font-size: clamp(8px, 1.5vw, 12px); }
+    .specials-grid[data-count="1"] .card-description{ font-size: clamp(10px, 1.7vw, 14px); }
     .specials-grid[data-count="1"] .card-price      { font-size: clamp(11px, 2.2vw, 17px); }
     .specials-grid[data-count="1"] .card-special    { margin-bottom: 10px; }
     .specials-grid[data-count="1"] .card-special:last-child { margin-bottom: 0; }
@@ -301,28 +301,28 @@
 
     .specials-grid[data-count="2"] .card-header   { font-size: clamp(6px, 1vw, 8px); }
     .specials-grid[data-count="2"] .card-title     { font-size: clamp(11px, 2.3vw, 18px); }
-    .specials-grid[data-count="2"] .card-description{ font-size: clamp(7px, 1.3vw, 10px); }
+    .specials-grid[data-count="2"] .card-description{ font-size: clamp(9px, 1.5vw, 12px); }
     .specials-grid[data-count="2"] .card-price      { font-size: clamp(10px, 1.9vw, 15px); }
     .specials-grid[data-count="2"] .item-sep        { margin: 7px auto; }
     .specials-grid[data-count="2"] .item-sep span   { font-size: 9px; }
 
     .specials-grid[data-count="3"] .card-header   { font-size: clamp(6px, 0.9vw, 8px); }
     .specials-grid[data-count="3"] .card-title     { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="3"] .card-description{ font-size: clamp(6.5px, 1.1vw, 9px); }
+    .specials-grid[data-count="3"] .card-description{ font-size: clamp(8.5px, 1.3vw, 11px); }
     .specials-grid[data-count="3"] .card-price      { font-size: clamp(9px, 1.6vw, 13px); }
     .specials-grid[data-count="3"] .item-sep        { margin: 5px auto; }
     .specials-grid[data-count="3"] .item-sep span   { font-size: 8px; }
 
     .specials-grid[data-count="4"] .card-header   { font-size: clamp(5.5px, 0.85vw, 7px); }
     .specials-grid[data-count="4"] .card-title     { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="4"] .card-description{ font-size: clamp(6px, 1vw, 8px); }
+    .specials-grid[data-count="4"] .card-description{ font-size: clamp(8px, 1.2vw, 10px); }
     .specials-grid[data-count="4"] .card-price      { font-size: clamp(8px, 1.4vw, 11px); }
     .specials-grid[data-count="4"] .item-sep        { margin: 4px auto; }
     .specials-grid[data-count="4"] .item-sep span   { font-size: 7px; }
 
     .specials-grid[data-count="5"] .card-header   { font-size: clamp(5px, 0.8vw, 6.5px); }
     .specials-grid[data-count="5"] .card-title     { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="5"] .card-description{ font-size: clamp(5.5px, 0.9vw, 7.5px); }
+    .specials-grid[data-count="5"] .card-description{ font-size: clamp(7.5px, 1.1vw, 9.5px); }
     .specials-grid[data-count="5"] .card-price      { font-size: clamp(7px, 1.2vw, 10px); }
     .specials-grid[data-count="5"] .item-sep        { margin: 3px auto; }
     .specials-grid[data-count="5"] .item-sep span   { font-size: 6.5px; }
@@ -360,8 +360,8 @@
         display: grid;
         grid-template-columns: 50% 50%;
         grid-template-rows: 50% 50%;
-        width: 100vw;
-        height: 100vh;
+        width: 8.5in;
+        height: 11in;
         border: none;
         border-radius: 0;
         overflow: visible;
@@ -393,7 +393,7 @@
       .specials-grid[data-count="1"] .card-header   { font-size: 7pt; margin-bottom: 10pt; }
       .specials-grid[data-count="1"] .card-header-rule { margin-bottom: 12pt; }
       .specials-grid[data-count="1"] .card-title    { font-size: 22pt; }
-      .specials-grid[data-count="1"] .card-description { font-size: 10.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="1"] .card-description { font-size: 12.5pt; margin-top: 5pt; }
       .specials-grid[data-count="1"] .card-price    { font-size: 16pt; margin-top: 8pt; }
       .specials-grid[data-count="1"] .item-sep      { margin: 12pt auto; width: 1.8in; }
       .specials-grid[data-count="1"] .item-sep span { font-size: 8pt; }
@@ -402,7 +402,7 @@
       .specials-grid[data-count="2"] .card-header   { font-size: 6.5pt; margin-bottom: 8pt; }
       .specials-grid[data-count="2"] .card-header-rule { margin-bottom: 10pt; }
       .specials-grid[data-count="2"] .card-title    { font-size: 17pt; }
-      .specials-grid[data-count="2"] .card-description { font-size: 9.5pt; margin-top: 4pt; }
+      .specials-grid[data-count="2"] .card-description { font-size: 11.5pt; margin-top: 4pt; }
       .specials-grid[data-count="2"] .card-price    { font-size: 13pt; margin-top: 6pt; }
       .specials-grid[data-count="2"] .item-sep      { margin: 10pt auto; width: 1.6in; }
       .specials-grid[data-count="2"] .item-sep span { font-size: 7.5pt; }
@@ -411,7 +411,7 @@
       .specials-grid[data-count="3"] .card-header   { font-size: 6pt; margin-bottom: 7pt; }
       .specials-grid[data-count="3"] .card-header-rule { margin-bottom: 8pt; }
       .specials-grid[data-count="3"] .card-title    { font-size: 14pt; }
-      .specials-grid[data-count="3"] .card-description { font-size: 8.5pt; margin-top: 3pt; }
+      .specials-grid[data-count="3"] .card-description { font-size: 10.5pt; margin-top: 3pt; }
       .specials-grid[data-count="3"] .card-price    { font-size: 11.5pt; margin-top: 5pt; }
       .specials-grid[data-count="3"] .item-sep      { margin: 7pt auto; width: 1.4in; }
       .specials-grid[data-count="3"] .item-sep span { font-size: 7pt; }
@@ -420,7 +420,7 @@
       .specials-grid[data-count="4"] .card-header   { font-size: 5.5pt; margin-bottom: 6pt; }
       .specials-grid[data-count="4"] .card-header-rule { margin-bottom: 7pt; }
       .specials-grid[data-count="4"] .card-title    { font-size: 12pt; }
-      .specials-grid[data-count="4"] .card-description { font-size: 8pt; margin-top: 2pt; }
+      .specials-grid[data-count="4"] .card-description { font-size: 10pt; margin-top: 2pt; }
       .specials-grid[data-count="4"] .card-price    { font-size: 10pt; margin-top: 4pt; }
       .specials-grid[data-count="4"] .item-sep      { margin: 5pt auto; width: 1.2in; }
       .specials-grid[data-count="4"] .item-sep span { font-size: 6.5pt; }
@@ -429,7 +429,7 @@
       .specials-grid[data-count="5"] .card-header   { font-size: 5pt; margin-bottom: 5pt; }
       .specials-grid[data-count="5"] .card-header-rule { margin-bottom: 6pt; }
       .specials-grid[data-count="5"] .card-title    { font-size: 10.5pt; }
-      .specials-grid[data-count="5"] .card-description { font-size: 7.5pt; margin-top: 2pt; }
+      .specials-grid[data-count="5"] .card-description { font-size: 9.5pt; margin-top: 2pt; }
       .specials-grid[data-count="5"] .card-price    { font-size: 9pt; margin-top: 3pt; }
       .specials-grid[data-count="5"] .item-sep      { margin: 4pt auto; width: 1in; }
       .specials-grid[data-count="5"] .item-sep span { font-size: 6pt; }
