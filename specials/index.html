@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specials</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a1a;
+      --muted: #666;
+      --border: #ddd;
+      --bg: #f7f6f3;
+      --card-bg: #fff;
+    }
+
+    /* ── SCREEN ── */
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 24px 16px 60px;
+      color: var(--ink);
+    }
+
+    .app { max-width: 600px; margin: 0 auto; }
+
+    .app-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    /* Form card */
+    .form-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      margin-bottom: 24px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 14px;
+      font-size: 1rem;
+      font-family: 'Lato', sans-serif;
+      color: var(--ink);
+      background: #fff;
+      -webkit-appearance: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus { outline: none; border-color: var(--ink); }
+
+    textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+    /* Header row */
+    .header-row { margin-bottom: 20px; }
+
+    /* Special item blocks */
+    #specials-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .special-item {
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 16px 14px 14px;
+      background: #fafaf9;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .item-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #bbb;
+      font-size: 1.1rem;
+      padding: 0;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-remove:hover { background: #fee; color: #c55; }
+
+    .item-fields { display: flex; flex-direction: column; gap: 10px; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .field-price { width: 80px; }
+
+    /* Buttons */
+    .btn-add {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      background: none;
+      border: 2px dashed #d0d0d0;
+      border-radius: 10px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #aaa;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-add:hover { border-color: #aaa; color: #555; }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    button.btn-clear, button.btn-print {
+      flex: 1;
+      padding: 16px 12px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    button.btn-clear { background: #efefef; color: #555; flex: 0 0 90px; }
+    button.btn-print { background: var(--ink); color: #fff; }
+    button:active { transform: scale(0.97); opacity: 0.85; }
+
+    .print-tip {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: #aaa;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .print-tip strong { color: #888; font-weight: 700; }
+
+    /* Preview */
+    .preview-wrap {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    .preview-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #bbb;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    /* 4-up grid */
+    .specials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      aspect-ratio: 8.5 / 11;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .special-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 12px;
+      text-align: center;
+      border: 1px dashed #d0d0d0;
+    }
+
+    /* Card header */
+    .card-header {
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .card-header-rule {
+      width: 60%;
+      height: 1px;
+      background: #ddd;
+      margin: 0 auto 10px;
+    }
+
+    /* Individual special within the card */
+    .card-special { width: 100%; }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .card-description {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      color: #555;
+      line-height: 1.45;
+      margin-top: 3px;
+    }
+
+    .card-price {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+
+    .item-sep {
+      display: flex;
+      align-items: center;
+      width: 55%;
+      margin: 0 auto;
+    }
+
+    .item-sep::before,
+    .item-sep::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
+
+    .item-sep span {
+      color: #ccc;
+      padding: 0 6px;
+      line-height: 1;
+    }
+
+    /* ── SCREEN FONT SCALING BY ITEM COUNT ── */
+    /* These use vw so the preview scales with window */
+    .specials-grid[data-count="1"] .card-header   { font-size: clamp(7px, 1.1vw, 9px); }
+    .specials-grid[data-count="1"] .card-title     { font-size: clamp(12px, 2.8vw, 22px); }
+    .specials-grid[data-count="1"] .card-description{ font-size: clamp(8px, 1.5vw, 12px); }
+    .specials-grid[data-count="1"] .card-price      { font-size: clamp(11px, 2.2vw, 17px); }
+    .specials-grid[data-count="1"] .card-special    { margin-bottom: 10px; }
+    .specials-grid[data-count="1"] .card-special:last-child { margin-bottom: 0; }
+    .specials-grid[data-count="1"] .item-sep        { margin: 8px auto; }
+    .specials-grid[data-count="1"] .item-sep span   { font-size: 10px; }
+
+    .specials-grid[data-count="2"] .card-header   { font-size: clamp(6px, 1vw, 8px); }
+    .specials-grid[data-count="2"] .card-title     { font-size: clamp(11px, 2.3vw, 18px); }
+    .specials-grid[data-count="2"] .card-description{ font-size: clamp(7px, 1.3vw, 10px); }
+    .specials-grid[data-count="2"] .card-price      { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="2"] .item-sep        { margin: 7px auto; }
+    .specials-grid[data-count="2"] .item-sep span   { font-size: 9px; }
+
+    .specials-grid[data-count="3"] .card-header   { font-size: clamp(6px, 0.9vw, 8px); }
+    .specials-grid[data-count="3"] .card-title     { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="3"] .card-description{ font-size: clamp(6.5px, 1.1vw, 9px); }
+    .specials-grid[data-count="3"] .card-price      { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="3"] .item-sep        { margin: 5px auto; }
+    .specials-grid[data-count="3"] .item-sep span   { font-size: 8px; }
+
+    .specials-grid[data-count="4"] .card-header   { font-size: clamp(5.5px, 0.85vw, 7px); }
+    .specials-grid[data-count="4"] .card-title     { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="4"] .card-description{ font-size: clamp(6px, 1vw, 8px); }
+    .specials-grid[data-count="4"] .card-price      { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="4"] .item-sep        { margin: 4px auto; }
+    .specials-grid[data-count="4"] .item-sep span   { font-size: 7px; }
+
+    .specials-grid[data-count="5"] .card-header   { font-size: clamp(5px, 0.8vw, 6.5px); }
+    .specials-grid[data-count="5"] .card-title     { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="5"] .card-description{ font-size: clamp(5.5px, 0.9vw, 7.5px); }
+    .specials-grid[data-count="5"] .card-price      { font-size: clamp(7px, 1.2vw, 10px); }
+    .specials-grid[data-count="5"] .item-sep        { margin: 3px auto; }
+    .specials-grid[data-count="5"] .item-sep span   { font-size: 6.5px; }
+
+    /* ── PRINT ── */
+    @media print {
+      @page { size: letter portrait; margin: 0; }
+
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: white !important;
+      }
+
+      .app-title, .form-card, .preview-label { display: none !important; }
+
+      .app {
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .preview-wrap {
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        background: white !important;
+        width: 100% !important;
+      }
+
+      .specials-grid {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 50% 50%;
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
+        overflow: visible;
+        aspect-ratio: unset;
+        margin: 0;
+        padding: 0;
+      }
+
+      .special-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border: none;
+      }
+
+      .special-card:nth-child(1),
+      .special-card:nth-child(2) { border-bottom: 1px dashed #bbb; }
+      .special-card:nth-child(1),
+      .special-card:nth-child(3) { border-right: 1px dashed #bbb; }
+
+      .card-header-rule { background: #ccc; }
+      .item-sep::before, .item-sep::after { background: #ccc; }
+      .item-sep span { color: #bbb; }
+
+      /* Print scaling by count */
+      .specials-grid[data-count="1"] .special-card  { padding: 0.45in 0.42in; }
+      .specials-grid[data-count="1"] .card-header   { font-size: 7pt; margin-bottom: 10pt; }
+      .specials-grid[data-count="1"] .card-header-rule { margin-bottom: 12pt; }
+      .specials-grid[data-count="1"] .card-title    { font-size: 22pt; }
+      .specials-grid[data-count="1"] .card-description { font-size: 10.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="1"] .card-price    { font-size: 16pt; margin-top: 8pt; }
+      .specials-grid[data-count="1"] .item-sep      { margin: 12pt auto; width: 1.8in; }
+      .specials-grid[data-count="1"] .item-sep span { font-size: 8pt; }
+
+      .specials-grid[data-count="2"] .special-card  { padding: 0.42in 0.40in; }
+      .specials-grid[data-count="2"] .card-header   { font-size: 6.5pt; margin-bottom: 8pt; }
+      .specials-grid[data-count="2"] .card-header-rule { margin-bottom: 10pt; }
+      .specials-grid[data-count="2"] .card-title    { font-size: 17pt; }
+      .specials-grid[data-count="2"] .card-description { font-size: 9.5pt; margin-top: 4pt; }
+      .specials-grid[data-count="2"] .card-price    { font-size: 13pt; margin-top: 6pt; }
+      .specials-grid[data-count="2"] .item-sep      { margin: 10pt auto; width: 1.6in; }
+      .specials-grid[data-count="2"] .item-sep span { font-size: 7.5pt; }
+
+      .specials-grid[data-count="3"] .special-card  { padding: 0.38in 0.38in; }
+      .specials-grid[data-count="3"] .card-header   { font-size: 6pt; margin-bottom: 7pt; }
+      .specials-grid[data-count="3"] .card-header-rule { margin-bottom: 8pt; }
+      .specials-grid[data-count="3"] .card-title    { font-size: 14pt; }
+      .specials-grid[data-count="3"] .card-description { font-size: 8.5pt; margin-top: 3pt; }
+      .specials-grid[data-count="3"] .card-price    { font-size: 11.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="3"] .item-sep      { margin: 7pt auto; width: 1.4in; }
+      .specials-grid[data-count="3"] .item-sep span { font-size: 7pt; }
+
+      .specials-grid[data-count="4"] .special-card  { padding: 0.3in 0.35in; }
+      .specials-grid[data-count="4"] .card-header   { font-size: 5.5pt; margin-bottom: 6pt; }
+      .specials-grid[data-count="4"] .card-header-rule { margin-bottom: 7pt; }
+      .specials-grid[data-count="4"] .card-title    { font-size: 12pt; }
+      .specials-grid[data-count="4"] .card-description { font-size: 8pt; margin-top: 2pt; }
+      .specials-grid[data-count="4"] .card-price    { font-size: 10pt; margin-top: 4pt; }
+      .specials-grid[data-count="4"] .item-sep      { margin: 5pt auto; width: 1.2in; }
+      .specials-grid[data-count="4"] .item-sep span { font-size: 6.5pt; }
+
+      .specials-grid[data-count="5"] .special-card  { padding: 0.22in 0.32in; }
+      .specials-grid[data-count="5"] .card-header   { font-size: 5pt; margin-bottom: 5pt; }
+      .specials-grid[data-count="5"] .card-header-rule { margin-bottom: 6pt; }
+      .specials-grid[data-count="5"] .card-title    { font-size: 10.5pt; }
+      .specials-grid[data-count="5"] .card-description { font-size: 7.5pt; margin-top: 2pt; }
+      .specials-grid[data-count="5"] .card-price    { font-size: 9pt; margin-top: 3pt; }
+      .specials-grid[data-count="5"] .item-sep      { margin: 4pt auto; width: 1in; }
+      .specials-grid[data-count="5"] .item-sep span { font-size: 6pt; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1 class="app-title">Tonight's Specials</h1>
+
+    <div class="form-card">
+      <!-- Optional header -->
+      <div class="header-row">
+        <div class="section-label">Slip header <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></div>
+        <input type="text" id="slip-header" placeholder="Tonight's Specials" />
+      </div>
+
+      <!-- Dynamic specials list -->
+      <div id="specials-list"></div>
+
+      <button class="btn-add" id="btn-add" onclick="addItem()">+ Add Special</button>
+
+      <div class="btn-row">
+        <button class="btn-clear" onclick="clearAll()">Clear</button>
+        <button class="btn-print" onclick="window.print()">Print</button>
+      </div>
+      <p class="print-tip">In Safari's print dialog → uncheck <strong>Print headers and footers</strong></p>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="preview-label">Preview — 4 per sheet, cut on dashed lines</div>
+      <div class="specials-grid" id="grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const MAX = 5;
+    let items = [{ title: '', desc: '', price: '' }];
+
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    /* ── FORM ── */
+    function renderForm() {
+      const list = document.getElementById('specials-list');
+      list.innerHTML = items.map((item, i) => `
+        <div class="special-item">
+          <div class="item-header">
+            <span class="item-num">Special ${i + 1}</span>
+            ${items.length > 1
+              ? `<button class="btn-remove" onclick="removeItem(${i})" title="Remove">✕</button>`
+              : ''}
+          </div>
+          <div class="item-fields">
+            <input type="text" placeholder="Dish name" value="${esc(item.title)}"
+              oninput="update(${i},'title',this.value)" />
+            <textarea placeholder="Description (ingredients, prep style…)"
+              oninput="update(${i},'desc',this.value)">${esc(item.desc)}</textarea>
+            <div class="field-row">
+              <input type="text" placeholder="Price — e.g. $28" value="${esc(item.price)}"
+                oninput="update(${i},'price',this.value)" />
+            </div>
+          </div>
+        </div>`).join('');
+
+      document.getElementById('btn-add').style.display =
+        items.length >= MAX ? 'none' : 'block';
+
+      // Re-bind header input (static, not rebuilt)
+      renderCard();
+    }
+
+    function update(i, field, val) {
+      items[i][field] = val;
+      renderCard();
+    }
+
+    function addItem() {
+      if (items.length >= MAX) return;
+      items.push({ title: '', desc: '', price: '' });
+      renderForm();
+    }
+
+    function removeItem(i) {
+      items.splice(i, 1);
+      renderForm();
+    }
+
+    function clearAll() {
+      items = [{ title: '', desc: '', price: '' }];
+      document.getElementById('slip-header').value = '';
+      renderForm();
+    }
+
+    /* ── CARD RENDER ── */
+    function renderCard() {
+      const header = document.getElementById('slip-header').value.trim();
+      const n = items.length;
+
+      const headerHtml = header
+        ? `<div class="card-header">${esc(header)}</div>
+           <div class="card-header-rule"></div>`
+        : '';
+
+      const specialsHtml = items.map((item, i) => {
+        const sep = i < items.length - 1
+          ? `<div class="item-sep"><span>✦</span></div>`
+          : '';
+        return `
+          <div class="card-special">
+            <div class="card-title">${esc(item.title) || 'Dish Name'}</div>
+            <div class="card-description">${esc(item.desc) || 'description'}</div>
+            <div class="card-price">${esc(item.price) || '$—'}</div>
+          </div>
+          ${sep}`;
+      }).join('');
+
+      const card = `
+        <div class="special-card">
+          ${headerHtml}
+          ${specialsHtml}
+        </div>`;
+
+      const grid = document.getElementById('grid');
+      grid.dataset.count = n;
+      grid.innerHTML = card + card + card + card;
+    }
+
+    // Bind header input
+    document.getElementById('slip-header').addEventListener('input', renderCard);
+
+    // Init
+    renderForm();
+  </script>
+</body>
+</html>
