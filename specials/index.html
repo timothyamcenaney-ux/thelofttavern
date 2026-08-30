@@ -88,7 +88,7 @@
       transition: border-color 0.15s;
     }
     input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--ink); }
-    textarea { resize: vertical; min-height: 62px; line-height: 1.45; }
+    textarea { resize: vertical; min-height: 60px; line-height: 1.45; }
 
     /* ── TONIGHT'S SPECIALS ── */
     #slip-header { margin-bottom: 14px; }
@@ -178,6 +178,31 @@
     }
     .custom-form.hidden { display: none; }
     .custom-form input { font-size: 0.9rem; padding: 9px 12px; }
+
+    /* Extra fields: announcement + footer */
+    .extra-field {
+      margin-top: 14px;
+    }
+
+    .field-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field-note {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #bbb;
+      font-size: 0.67rem;
+    }
+
+    .extra-field textarea { min-height: 52px; font-size: 0.88rem; }
+    .extra-field input[type="text"] { font-size: 0.88rem; }
 
     /* Buttons */
     .btn-dashed {
@@ -393,14 +418,24 @@
       overflow: hidden;
     }
 
+    /* Card: flex column, no justify-content (card-main handles centering) */
     .special-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 10px 12px;
       text-align: center;
       border: 1px dashed #d0d0d0;
+    }
+
+    /* Inner wrapper centers specials content vertically */
+    .card-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
 
     .card-header {
@@ -453,41 +488,86 @@
     .item-sep::before, .item-sep::after { content: ''; flex: 1; height: 1px; background: #ddd; }
     .item-sep span { color: #ccc; padding: 0 6px; line-height: 1; }
 
+    /* Announcement — scales with items, visually distinct (no Playfair, no price) */
+    .card-announce-sep {
+      width: 60%;
+      height: 1px;
+      background: #e4e4e4;
+      margin: 0 auto;
+    }
+
+    .card-announcement {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-style: italic;
+      color: #333;
+      line-height: 1.4;
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    /* Footer — pinned to bottom, fixed font size regardless of item count */
+    .card-foot {
+      width: 85%;
+      text-align: center;
+      margin-top: 8px;
+      padding-top: 5px;
+      border-top: 1px dashed #ccc;
+    }
+
+    .card-foot-text {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      color: #444;
+      font-size: clamp(7px, 1vw, 9px); /* screen: small fixed */
+      line-height: 1.35;
+    }
+
     /* Screen font scaling by item count */
-    .specials-grid[data-count="1"] .card-header      { font-size: clamp(8px, 1.3vw, 11px); }
-    .specials-grid[data-count="1"] .card-title       { font-size: clamp(12px, 2.8vw, 22px); }
-    .specials-grid[data-count="1"] .card-description { font-size: clamp(10px, 1.7vw, 14px); }
-    .specials-grid[data-count="1"] .card-price       { font-size: clamp(11px, 2.2vw, 17px); }
-    .specials-grid[data-count="1"] .item-sep         { margin: 8px auto; }
-    .specials-grid[data-count="1"] .item-sep span    { font-size: 10px; }
+    .specials-grid[data-count="1"] .card-header       { font-size: clamp(8px, 1.3vw, 11px); }
+    .specials-grid[data-count="1"] .card-title        { font-size: clamp(12px, 2.8vw, 22px); }
+    .specials-grid[data-count="1"] .card-description  { font-size: clamp(10px, 1.7vw, 14px); }
+    .specials-grid[data-count="1"] .card-price        { font-size: clamp(11px, 2.2vw, 17px); }
+    .specials-grid[data-count="1"] .item-sep          { margin: 8px auto; }
+    .specials-grid[data-count="1"] .item-sep span     { font-size: 10px; }
+    .specials-grid[data-count="1"] .card-announce-sep { margin: 8px auto; }
+    .specials-grid[data-count="1"] .card-announcement { font-size: clamp(10px, 1.6vw, 13px); }
 
-    .specials-grid[data-count="2"] .card-header      { font-size: clamp(7px, 1.1vw, 10px); }
-    .specials-grid[data-count="2"] .card-title       { font-size: clamp(11px, 2.3vw, 18px); }
-    .specials-grid[data-count="2"] .card-description { font-size: clamp(9px, 1.5vw, 12px); }
-    .specials-grid[data-count="2"] .card-price       { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="2"] .item-sep         { margin: 7px auto; }
-    .specials-grid[data-count="2"] .item-sep span    { font-size: 9px; }
+    .specials-grid[data-count="2"] .card-header       { font-size: clamp(7px, 1.1vw, 10px); }
+    .specials-grid[data-count="2"] .card-title        { font-size: clamp(11px, 2.3vw, 18px); }
+    .specials-grid[data-count="2"] .card-description  { font-size: clamp(9px, 1.5vw, 12px); }
+    .specials-grid[data-count="2"] .card-price        { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="2"] .item-sep          { margin: 7px auto; }
+    .specials-grid[data-count="2"] .item-sep span     { font-size: 9px; }
+    .specials-grid[data-count="2"] .card-announce-sep { margin: 7px auto; }
+    .specials-grid[data-count="2"] .card-announcement { font-size: clamp(9px, 1.4vw, 11px); }
 
-    .specials-grid[data-count="3"] .card-header      { font-size: clamp(7px, 1vw, 9px); }
-    .specials-grid[data-count="3"] .card-title       { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="3"] .card-description { font-size: clamp(8.5px, 1.3vw, 11px); }
-    .specials-grid[data-count="3"] .card-price       { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="3"] .item-sep         { margin: 5px auto; }
-    .specials-grid[data-count="3"] .item-sep span    { font-size: 8px; }
+    .specials-grid[data-count="3"] .card-header       { font-size: clamp(7px, 1vw, 9px); }
+    .specials-grid[data-count="3"] .card-title        { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="3"] .card-description  { font-size: clamp(8.5px, 1.3vw, 11px); }
+    .specials-grid[data-count="3"] .card-price        { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="3"] .item-sep          { margin: 5px auto; }
+    .specials-grid[data-count="3"] .item-sep span     { font-size: 8px; }
+    .specials-grid[data-count="3"] .card-announce-sep { margin: 5px auto; }
+    .specials-grid[data-count="3"] .card-announcement { font-size: clamp(8px, 1.2vw, 10px); }
 
-    .specials-grid[data-count="4"] .card-header      { font-size: clamp(6px, 0.9vw, 8px); }
-    .specials-grid[data-count="4"] .card-title       { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="4"] .card-description { font-size: clamp(8px, 1.2vw, 10px); }
-    .specials-grid[data-count="4"] .card-price       { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="4"] .item-sep         { margin: 4px auto; }
-    .specials-grid[data-count="4"] .item-sep span    { font-size: 7px; }
+    .specials-grid[data-count="4"] .card-header       { font-size: clamp(6px, 0.9vw, 8px); }
+    .specials-grid[data-count="4"] .card-title        { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="4"] .card-description  { font-size: clamp(8px, 1.2vw, 10px); }
+    .specials-grid[data-count="4"] .card-price        { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="4"] .item-sep          { margin: 4px auto; }
+    .specials-grid[data-count="4"] .item-sep span     { font-size: 7px; }
+    .specials-grid[data-count="4"] .card-announce-sep { margin: 4px auto; }
+    .specials-grid[data-count="4"] .card-announcement { font-size: clamp(7.5px, 1.1vw, 9px); }
 
-    .specials-grid[data-count="5"] .card-header      { font-size: clamp(6px, 0.85vw, 7.5px); }
-    .specials-grid[data-count="5"] .card-title       { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="5"] .card-description { font-size: clamp(7.5px, 1.1vw, 9.5px); }
-    .specials-grid[data-count="5"] .card-price       { font-size: clamp(7px, 1.2vw, 10px); }
-    .specials-grid[data-count="5"] .item-sep         { margin: 3px auto; }
-    .specials-grid[data-count="5"] .item-sep span    { font-size: 6.5px; }
+    .specials-grid[data-count="5"] .card-header       { font-size: clamp(6px, 0.85vw, 7.5px); }
+    .specials-grid[data-count="5"] .card-title        { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="5"] .card-description  { font-size: clamp(7.5px, 1.1vw, 9.5px); }
+    .specials-grid[data-count="5"] .card-price        { font-size: clamp(7px, 1.2vw, 10px); }
+    .specials-grid[data-count="5"] .item-sep          { margin: 3px auto; }
+    .specials-grid[data-count="5"] .item-sep span     { font-size: 6.5px; }
+    .specials-grid[data-count="5"] .card-announce-sep { margin: 3px auto; }
+    .specials-grid[data-count="5"] .card-announcement { font-size: clamp(7px, 1vw, 8px); }
 
     /* ── PRINT ── */
     @media print {
@@ -537,7 +617,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         text-align: center;
         border: none;
       }
@@ -552,6 +631,14 @@
       .item-sep::before, .item-sep::after { background: #ccc; }
       .item-sep span { color: #bbb; }
 
+      /* Footer: fixed 11pt, dark gray, regardless of item count */
+      .card-foot { border-top-color: #ccc; margin-top: 10pt; padding-top: 5pt; }
+      .card-foot-text { font-size: 11pt; color: #333; }
+
+      /* Announcement print colors */
+      .card-announce-sep { background: #ccc; }
+      .card-announcement { color: #222; }
+
       .specials-grid[data-count="1"] .special-card      { padding: 0.45in 0.42in; }
       .specials-grid[data-count="1"] .card-header       { font-size: 8.5pt; margin-bottom: 10pt; }
       .specials-grid[data-count="1"] .card-header-rule  { margin-bottom: 12pt; }
@@ -560,6 +647,8 @@
       .specials-grid[data-count="1"] .card-price        { font-size: 16pt; margin-top: 8pt; }
       .specials-grid[data-count="1"] .item-sep          { margin: 12pt auto; width: 1.8in; }
       .specials-grid[data-count="1"] .item-sep span     { font-size: 8pt; }
+      .specials-grid[data-count="1"] .card-announce-sep { margin: 10pt auto; }
+      .specials-grid[data-count="1"] .card-announcement { font-size: 12pt; margin-top: 4pt; }
 
       .specials-grid[data-count="2"] .special-card      { padding: 0.42in 0.40in; }
       .specials-grid[data-count="2"] .card-header       { font-size: 8pt; margin-bottom: 8pt; }
@@ -569,6 +658,8 @@
       .specials-grid[data-count="2"] .card-price        { font-size: 13pt; margin-top: 6pt; }
       .specials-grid[data-count="2"] .item-sep          { margin: 10pt auto; width: 1.6in; }
       .specials-grid[data-count="2"] .item-sep span     { font-size: 7.5pt; }
+      .specials-grid[data-count="2"] .card-announce-sep { margin: 8pt auto; }
+      .specials-grid[data-count="2"] .card-announcement { font-size: 11pt; margin-top: 3pt; }
 
       .specials-grid[data-count="3"] .special-card      { padding: 0.38in 0.38in; }
       .specials-grid[data-count="3"] .card-header       { font-size: 7.5pt; margin-bottom: 7pt; }
@@ -578,6 +669,8 @@
       .specials-grid[data-count="3"] .card-price        { font-size: 11.5pt; margin-top: 5pt; }
       .specials-grid[data-count="3"] .item-sep          { margin: 7pt auto; width: 1.4in; }
       .specials-grid[data-count="3"] .item-sep span     { font-size: 7pt; }
+      .specials-grid[data-count="3"] .card-announce-sep { margin: 6pt auto; }
+      .specials-grid[data-count="3"] .card-announcement { font-size: 10pt; margin-top: 3pt; }
 
       .specials-grid[data-count="4"] .special-card      { padding: 0.3in 0.35in; }
       .specials-grid[data-count="4"] .card-header       { font-size: 7pt; margin-bottom: 6pt; }
@@ -587,6 +680,8 @@
       .specials-grid[data-count="4"] .card-price        { font-size: 10pt; margin-top: 4pt; }
       .specials-grid[data-count="4"] .item-sep          { margin: 5pt auto; width: 1.2in; }
       .specials-grid[data-count="4"] .item-sep span     { font-size: 6.5pt; }
+      .specials-grid[data-count="4"] .card-announce-sep { margin: 5pt auto; }
+      .specials-grid[data-count="4"] .card-announcement { font-size: 9pt; margin-top: 2pt; }
 
       .specials-grid[data-count="5"] .special-card      { padding: 0.22in 0.32in; }
       .specials-grid[data-count="5"] .card-header       { font-size: 6.5pt; margin-bottom: 5pt; }
@@ -596,6 +691,8 @@
       .specials-grid[data-count="5"] .card-price        { font-size: 9pt; margin-top: 3pt; }
       .specials-grid[data-count="5"] .item-sep          { margin: 4pt auto; width: 1in; }
       .specials-grid[data-count="5"] .item-sep span     { font-size: 6pt; }
+      .specials-grid[data-count="5"] .card-announce-sep { margin: 4pt auto; }
+      .specials-grid[data-count="5"] .card-announcement { font-size: 8pt; margin-top: 2pt; }
     }
   </style>
 </head>
@@ -624,6 +721,19 @@
         </div>
       </div>
       <button class="btn-dashed" id="btn-custom">+ Custom Item</button>
+
+      <!-- Announcement field -->
+      <div class="extra-field">
+        <div class="field-label">Announcement <span class="field-note">— scales with items, italic, not read as a special</span></div>
+        <textarea id="announcement" placeholder="Ski mountain opens Friday · Trivia every Wednesday · Closed Sept 9–16"></textarea>
+      </div>
+
+      <!-- Footer field -->
+      <div class="extra-field">
+        <div class="field-label">Card Footer <span class="field-note">— pinned to bottom, fixed 11pt, semi-permanent</span></div>
+        <input type="text" id="card-footer" placeholder="Gift Cards available at www.thelofttavern.com" />
+      </div>
+
       <div class="btn-row">
         <button class="btn-clear" onclick="clearAll()">Clear</button>
         <button class="btn-print" onclick="window.print()">Print</button>
@@ -676,8 +786,8 @@
     const auth  = getAuth(fbApp);
 
     // ── State ──
-    let library   = [];   // { id, title, description, price }[]
-    let active    = [];   // { title, description, price }[]  max 5
+    let library   = [];
+    let active    = [];   // max 5
     let editingId = null;
     let listenersStarted = false;
 
@@ -698,7 +808,6 @@
     });
 
     function startListeners() {
-      // Library — real-time, sorted alphabetically
       onSnapshot(collection(db, 'specials_library'), snap => {
         library = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
@@ -706,14 +815,18 @@
         renderLibrary();
       });
 
-      // Active specials — real-time, shared across all devices
       onSnapshot(doc(db, 'active_specials', 'current'), snap => {
         if (snap.exists()) {
           const data = snap.data();
           active = data.items || [];
-          const hdr = data.header || '';
-          const el = document.getElementById('slip-header');
-          if (document.activeElement !== el) el.value = hdr;
+
+          const syncField = (id, val) => {
+            const el = document.getElementById(id);
+            if (document.activeElement !== el) el.value = val || '';
+          };
+          syncField('slip-header', data.header);
+          syncField('announcement', data.announcement);
+          syncField('card-footer',  data.footer);
         } else {
           active = [];
         }
@@ -774,8 +887,11 @@
 
     // ── Render: Print card preview ──
     function renderCard() {
-      const header = document.getElementById('slip-header').value.trim();
-      const items  = active.length > 0
+      const header       = document.getElementById('slip-header').value.trim();
+      const announcement = document.getElementById('announcement').value.trim();
+      const footer       = document.getElementById('card-footer').value.trim();
+
+      const items = active.length > 0
         ? active
         : [{ title: 'Dish Name', description: 'description', price: '$—' }];
       const n = items.length;
@@ -795,7 +911,22 @@
         </div>${sep}`;
       }).join('');
 
-      const card = `<div class="special-card">${headerHtml}${specialsHtml}</div>`;
+      const announceHtml = announcement
+        ? `<div class="card-announce-sep"></div>
+           <div class="card-announcement">${esc(announcement)}</div>`
+        : '';
+
+      const footHtml = footer
+        ? `<div class="card-foot"><div class="card-foot-text">${esc(footer)}</div></div>`
+        : '';
+
+      const card = `<div class="special-card">
+        <div class="card-main">
+          ${headerHtml}${specialsHtml}${announceHtml}
+        </div>
+        ${footHtml}
+      </div>`;
+
       const grid = document.getElementById('grid');
       grid.dataset.count = n;
       grid.innerHTML = card + card + card + card;
@@ -819,15 +950,19 @@
 
     async function clearAll() {
       active = [];
-      document.getElementById('slip-header').value = '';
+      ['slip-header', 'announcement', 'card-footer'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
       await persistActive();
     }
 
     async function persistActive() {
       await setDoc(doc(db, 'active_specials', 'current'), {
-        header: document.getElementById('slip-header').value.trim(),
-        items: active,
-        updatedAt: serverTimestamp()
+        header:       document.getElementById('slip-header').value.trim(),
+        announcement: document.getElementById('announcement').value.trim(),
+        footer:       document.getElementById('card-footer').value.trim(),
+        items:        active,
+        updatedAt:    serverTimestamp()
       });
     }
 
@@ -838,7 +973,7 @@
       if (item) addToActive(item);
     }
 
-    // ── Library: add / edit form ──
+    // ── Library: form ──
     function showForm(id) {
       editingId = id;
       const form = document.getElementById('item-form');
@@ -867,8 +1002,8 @@
       const data = {
         title,
         description: document.getElementById('form-desc').value.trim(),
-        price: document.getElementById('form-price').value.trim(),
-        updatedAt: serverTimestamp()
+        price:       document.getElementById('form-price').value.trim(),
+        updatedAt:   serverTimestamp()
       };
       if (editingId) {
         await updateDoc(doc(db, 'specials_library', editingId), data);
@@ -885,13 +1020,13 @@
       await deleteDoc(doc(db, 'specials_library', id));
     }
 
-    // ── Custom one-off item (not saved to library) ──
+    // ── Custom one-off item ──
     function showCustom() {
       document.getElementById('custom-form').classList.remove('hidden');
       document.getElementById('btn-custom').style.display = 'none';
-      document.getElementById('custom-title').value = '';
-      document.getElementById('custom-desc').value  = '';
-      document.getElementById('custom-price').value = '';
+      ['custom-title','custom-desc','custom-price'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
       document.getElementById('custom-title').focus();
     }
 
@@ -906,22 +1041,27 @@
       await addToActive({
         title,
         description: document.getElementById('custom-desc').value.trim(),
-        price: document.getElementById('custom-price').value.trim()
+        price:       document.getElementById('custom-price').value.trim()
       });
       hideCustom();
     }
 
-    // ── Slip header: debounced sync to Firestore ──
-    let hdrTimer;
-    document.getElementById('slip-header').addEventListener('input', () => {
-      renderCard();
-      clearTimeout(hdrTimer);
-      hdrTimer = setTimeout(persistActive, 700);
+    // ── Debounced sync for text fields ──
+    const timers = {};
+    const debounceSync = id => {
+      clearTimeout(timers[id]);
+      timers[id] = setTimeout(persistActive, 700);
+    };
+
+    ['slip-header', 'announcement', 'card-footer'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        renderCard();
+        debounceSync(id);
+      });
     });
 
     document.getElementById('btn-custom').addEventListener('click', showCustom);
 
-    // ── Escape key closes forms ──
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { hideForm(); hideCustom(); }
     });
@@ -934,14 +1074,12 @@
       return d.innerHTML;
     }
 
-    // Expose to inline onclick handlers (required for type="module")
     Object.assign(window, {
       removeActive, clearAll, tapLib,
       showForm, hideForm, saveItem, editItem, deleteItem,
       showCustom, hideCustom, addCustom
     });
 
-    // Initial render before Firestore responds
     renderActive();
     renderCard();
   </script>
