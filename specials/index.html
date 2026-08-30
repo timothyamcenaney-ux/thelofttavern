@@ -3,10 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Loft Specials">
   <title>Loft Specials</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
     :root {
       --ink: #1a1a1a;
@@ -499,7 +507,7 @@
     .card-announcement {
       font-family: 'Lato', sans-serif;
       font-weight: 400;
-      font-style: italic;
+      font-style: normal;
       color: #333;
       line-height: 1.4;
       width: 100%;
@@ -580,7 +588,12 @@
         height: 11in !important;
         min-height: 0 !important;
         background: white !important;
+        -webkit-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
       }
+
+      /* Prevent iOS from stretching description line-height */
+      .card-description { line-height: 1.45 !important; }
 
       .app-header, .panel, .preview-label { display: none !important; }
 
@@ -738,7 +751,7 @@
         <button class="btn-clear" onclick="clearAll()">Clear</button>
         <button class="btn-print" onclick="window.print()">Print</button>
       </div>
-      <p class="print-tip">Safari → uncheck <strong>Print headers and footers</strong></p>
+      <p class="print-tip">Mac Safari → uncheck <strong>Print headers and footers</strong> · iPad: <strong>Share → Add to Home Screen</strong> for best results</p>
     </div>
 
     <!-- Menu Library -->
@@ -784,6 +797,15 @@
     const fbApp = initializeApp(firebaseConfig);
     const db    = getFirestore(fbApp);
     const auth  = getAuth(fbApp);
+
+    // ── iOS print fix: set viewport to exact paper width before printing ──
+    const metaVp = document.querySelector('meta[name="viewport"]');
+    window.addEventListener('beforeprint', () => {
+      metaVp.content = 'width=816';
+    });
+    window.addEventListener('afterprint', () => {
+      metaVp.content = 'width=device-width, initial-scale=1.0';
+    });
 
     // ── State ──
     let library   = [];
