@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Specials</title>
+  <title>Loft Specials</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,129 +16,179 @@
       --card-bg: #fff;
     }
 
-    /* ── SCREEN ── */
     body {
       font-family: 'Lato', sans-serif;
       background: var(--bg);
       min-height: 100vh;
-      padding: 24px 16px 60px;
+      padding: 20px 14px 60px;
       color: var(--ink);
     }
 
-    .app { max-width: 600px; margin: 0 auto; }
+    .app { max-width: 680px; margin: 0 auto; }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
 
     .app-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 600;
-      text-align: center;
-      margin-bottom: 28px;
     }
 
-    /* Form card */
-    .form-card {
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      flex-shrink: 0;
+      transition: background 0.4s;
+    }
+    .status-dot.connected { background: #4caf50; }
+
+    /* Shared panel */
+    .panel {
       background: var(--card-bg);
       border-radius: 14px;
-      padding: 24px 20px 20px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-      margin-bottom: 24px;
+      padding: 20px 18px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      margin-bottom: 16px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
     }
 
     .section-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 10px;
     }
 
+    /* Inputs */
     input[type="text"], textarea {
       width: 100%;
       border: 2px solid var(--border);
       border-radius: 8px;
-      padding: 13px 14px;
-      font-size: 1rem;
+      padding: 11px 13px;
+      font-size: 0.95rem;
       font-family: 'Lato', sans-serif;
       color: var(--ink);
       background: #fff;
       -webkit-appearance: none;
       transition: border-color 0.15s;
     }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--ink); }
+    textarea { resize: vertical; min-height: 62px; line-height: 1.45; }
 
-    input[type="text"]:focus,
-    textarea:focus { outline: none; border-color: var(--ink); }
+    /* ── TONIGHT'S SPECIALS ── */
+    #slip-header { margin-bottom: 14px; }
 
-    textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+    #active-list { display: flex; flex-direction: column; gap: 8px; }
 
-    /* Header row */
-    .header-row { margin-bottom: 20px; }
-
-    /* Special item blocks */
-    #specials-list { display: flex; flex-direction: column; gap: 16px; }
-
-    .special-item {
-      border: 1.5px solid #e8e8e8;
-      border-radius: 10px;
-      padding: 16px 14px 14px;
-      background: #fafaf9;
-    }
-
-    .item-header {
+    .active-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #fafaf9;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 9px;
     }
 
-    .item-num {
-      font-size: 0.7rem;
+    .active-num {
+      font-size: 0.63rem;
       font-weight: 700;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #bbb;
+      flex-shrink: 0;
+      width: 16px;
+      text-align: center;
     }
 
-    .btn-remove {
+    .active-info { flex: 1; min-width: 0; }
+
+    .active-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .active-desc {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+
+    .active-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.8rem;
+      margin-top: 1px;
+    }
+
+    .btn-x {
       background: none;
       border: none;
-      color: #bbb;
-      font-size: 1.1rem;
-      padding: 0;
+      color: #ccc;
+      font-size: 1rem;
       width: 28px;
       height: 28px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       border-radius: 50%;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.13s, color 0.13s;
       -webkit-tap-highlight-color: transparent;
     }
+    .btn-x:hover { background: #fee; color: #c55; }
 
-    .btn-remove:hover { background: #fee; color: #c55; }
-
-    .item-fields { display: flex; flex-direction: column; gap: 10px; }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: start;
+    .active-empty {
+      text-align: center;
+      padding: 20px;
+      color: #bbb;
+      font-size: 0.82rem;
+      font-style: italic;
     }
 
-    .field-price { width: 80px; }
+    /* Custom mini-form */
+    .custom-form {
+      margin-top: 12px;
+      padding: 14px;
+      background: #f4f3f0;
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .custom-form.hidden { display: none; }
+    .custom-form input { font-size: 0.9rem; padding: 9px 12px; }
 
     /* Buttons */
-    .btn-add {
+    .btn-dashed {
       width: 100%;
-      margin-top: 16px;
-      padding: 14px;
+      margin-top: 12px;
+      padding: 11px;
       background: none;
       border: 2px dashed #d0d0d0;
-      border-radius: 10px;
+      border-radius: 9px;
       font-family: 'Lato', sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -147,18 +197,54 @@
       transition: border-color 0.15s, color 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
-
-    .btn-add:hover { border-color: #aaa; color: #555; }
+    .btn-dashed:hover { border-color: #aaa; color: #555; }
 
     .btn-row {
       display: flex;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 14px;
+    }
+
+    .btn-sm-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn-primary {
+      padding: 9px 15px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s;
+    }
+
+    .btn-ghost {
+      padding: 9px 15px;
+      background: transparent;
+      color: #888;
+      border: 1.5px solid #ddd;
+      border-radius: 7px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     button.btn-clear, button.btn-print {
       flex: 1;
-      padding: 16px 12px;
+      padding: 15px 12px;
       font-family: 'Lato', sans-serif;
       font-size: 0.85rem;
       font-weight: 700;
@@ -170,31 +256,125 @@
       -webkit-tap-highlight-color: transparent;
       transition: opacity 0.15s, transform 0.1s;
     }
-
-    button.btn-clear { background: #efefef; color: #555; flex: 0 0 90px; }
+    button.btn-clear { background: #efefef; color: #555; flex: 0 0 84px; }
     button.btn-print { background: var(--ink); color: #fff; }
     button:active { transform: scale(0.97); opacity: 0.85; }
 
     .print-tip {
-      margin-top: 12px;
-      font-size: 0.75rem;
+      margin-top: 10px;
+      font-size: 0.73rem;
       color: #aaa;
       text-align: center;
       line-height: 1.4;
     }
+    .print-tip strong { color: #888; }
 
-    .print-tip strong { color: #888; font-weight: 700; }
+    /* ── LIBRARY ── */
+    .item-form {
+      background: #f2f1ee;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .item-form.hidden { display: none; }
 
-    /* Preview */
+    #library-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .lib-card {
+      background: #fafaf9;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 12px 10px 10px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .lib-card:hover { border-color: #999; background: #f0efe9; }
+    .lib-card.at-max { opacity: 0.4; cursor: default; pointer-events: none; }
+
+    .lib-card-actions {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      display: flex;
+      gap: 3px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 0.78rem;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: color 0.12s, background 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-icon:hover { color: #555; background: rgba(0,0,0,0.07); }
+    .btn-icon.del:hover { color: #c55; background: #fee; }
+
+    .lib-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--ink);
+      padding-right: 40px;
+      line-height: 1.25;
+      margin-bottom: 5px;
+    }
+
+    .lib-desc {
+      font-size: 0.74rem;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.35;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .lib-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      color: var(--ink);
+    }
+
+    .lib-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 30px 16px;
+      color: #bbb;
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    /* ── PREVIEW ── */
     .preview-wrap {
       background: var(--card-bg);
       border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      padding: 20px 18px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      margin-bottom: 16px;
     }
 
     .preview-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -203,7 +383,6 @@
       margin-bottom: 14px;
     }
 
-    /* 4-up grid */
     .specials-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -224,7 +403,6 @@
       border: 1px dashed #d0d0d0;
     }
 
-    /* Card header */
     .card-header {
       font-family: 'Lato', sans-serif;
       font-weight: 700;
@@ -241,7 +419,6 @@
       margin: 0 auto 10px;
     }
 
-    /* Individual special within the card */
     .card-special { width: 100%; }
 
     .card-title {
@@ -273,59 +450,44 @@
       width: 55%;
       margin: 0 auto;
     }
+    .item-sep::before, .item-sep::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+    .item-sep span { color: #ccc; padding: 0 6px; line-height: 1; }
 
-    .item-sep::before,
-    .item-sep::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #ddd;
-    }
+    /* Screen font scaling by item count */
+    .specials-grid[data-count="1"] .card-header      { font-size: clamp(7px, 1.1vw, 9px); }
+    .specials-grid[data-count="1"] .card-title       { font-size: clamp(12px, 2.8vw, 22px); }
+    .specials-grid[data-count="1"] .card-description { font-size: clamp(10px, 1.7vw, 14px); }
+    .specials-grid[data-count="1"] .card-price       { font-size: clamp(11px, 2.2vw, 17px); }
+    .specials-grid[data-count="1"] .item-sep         { margin: 8px auto; }
+    .specials-grid[data-count="1"] .item-sep span    { font-size: 10px; }
 
-    .item-sep span {
-      color: #ccc;
-      padding: 0 6px;
-      line-height: 1;
-    }
+    .specials-grid[data-count="2"] .card-header      { font-size: clamp(6px, 1vw, 8px); }
+    .specials-grid[data-count="2"] .card-title       { font-size: clamp(11px, 2.3vw, 18px); }
+    .specials-grid[data-count="2"] .card-description { font-size: clamp(9px, 1.5vw, 12px); }
+    .specials-grid[data-count="2"] .card-price       { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="2"] .item-sep         { margin: 7px auto; }
+    .specials-grid[data-count="2"] .item-sep span    { font-size: 9px; }
 
-    /* ── SCREEN FONT SCALING BY ITEM COUNT ── */
-    /* These use vw so the preview scales with window */
-    .specials-grid[data-count="1"] .card-header   { font-size: clamp(7px, 1.1vw, 9px); }
-    .specials-grid[data-count="1"] .card-title     { font-size: clamp(12px, 2.8vw, 22px); }
-    .specials-grid[data-count="1"] .card-description{ font-size: clamp(10px, 1.7vw, 14px); }
-    .specials-grid[data-count="1"] .card-price      { font-size: clamp(11px, 2.2vw, 17px); }
-    .specials-grid[data-count="1"] .card-special    { margin-bottom: 10px; }
-    .specials-grid[data-count="1"] .card-special:last-child { margin-bottom: 0; }
-    .specials-grid[data-count="1"] .item-sep        { margin: 8px auto; }
-    .specials-grid[data-count="1"] .item-sep span   { font-size: 10px; }
+    .specials-grid[data-count="3"] .card-header      { font-size: clamp(6px, 0.9vw, 8px); }
+    .specials-grid[data-count="3"] .card-title       { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="3"] .card-description { font-size: clamp(8.5px, 1.3vw, 11px); }
+    .specials-grid[data-count="3"] .card-price       { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="3"] .item-sep         { margin: 5px auto; }
+    .specials-grid[data-count="3"] .item-sep span    { font-size: 8px; }
 
-    .specials-grid[data-count="2"] .card-header   { font-size: clamp(6px, 1vw, 8px); }
-    .specials-grid[data-count="2"] .card-title     { font-size: clamp(11px, 2.3vw, 18px); }
-    .specials-grid[data-count="2"] .card-description{ font-size: clamp(9px, 1.5vw, 12px); }
-    .specials-grid[data-count="2"] .card-price      { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="2"] .item-sep        { margin: 7px auto; }
-    .specials-grid[data-count="2"] .item-sep span   { font-size: 9px; }
+    .specials-grid[data-count="4"] .card-header      { font-size: clamp(5.5px, 0.85vw, 7px); }
+    .specials-grid[data-count="4"] .card-title       { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="4"] .card-description { font-size: clamp(8px, 1.2vw, 10px); }
+    .specials-grid[data-count="4"] .card-price       { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="4"] .item-sep         { margin: 4px auto; }
+    .specials-grid[data-count="4"] .item-sep span    { font-size: 7px; }
 
-    .specials-grid[data-count="3"] .card-header   { font-size: clamp(6px, 0.9vw, 8px); }
-    .specials-grid[data-count="3"] .card-title     { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="3"] .card-description{ font-size: clamp(8.5px, 1.3vw, 11px); }
-    .specials-grid[data-count="3"] .card-price      { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="3"] .item-sep        { margin: 5px auto; }
-    .specials-grid[data-count="3"] .item-sep span   { font-size: 8px; }
-
-    .specials-grid[data-count="4"] .card-header   { font-size: clamp(5.5px, 0.85vw, 7px); }
-    .specials-grid[data-count="4"] .card-title     { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="4"] .card-description{ font-size: clamp(8px, 1.2vw, 10px); }
-    .specials-grid[data-count="4"] .card-price      { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="4"] .item-sep        { margin: 4px auto; }
-    .specials-grid[data-count="4"] .item-sep span   { font-size: 7px; }
-
-    .specials-grid[data-count="5"] .card-header   { font-size: clamp(5px, 0.8vw, 6.5px); }
-    .specials-grid[data-count="5"] .card-title     { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="5"] .card-description{ font-size: clamp(7.5px, 1.1vw, 9.5px); }
-    .specials-grid[data-count="5"] .card-price      { font-size: clamp(7px, 1.2vw, 10px); }
-    .specials-grid[data-count="5"] .item-sep        { margin: 3px auto; }
-    .specials-grid[data-count="5"] .item-sep span   { font-size: 6.5px; }
+    .specials-grid[data-count="5"] .card-header      { font-size: clamp(5px, 0.8vw, 6.5px); }
+    .specials-grid[data-count="5"] .card-title       { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="5"] .card-description { font-size: clamp(7.5px, 1.1vw, 9.5px); }
+    .specials-grid[data-count="5"] .card-price       { font-size: clamp(7px, 1.2vw, 10px); }
+    .specials-grid[data-count="5"] .item-sep         { margin: 3px auto; }
+    .specials-grid[data-count="5"] .item-sep span    { font-size: 6.5px; }
 
     /* ── PRINT ── */
     @media print {
@@ -339,7 +501,7 @@
         background: white !important;
       }
 
-      .app-title, .form-card, .preview-label { display: none !important; }
+      .app-header, .panel, .preview-label { display: none !important; }
 
       .app {
         max-width: none !important;
@@ -388,184 +550,398 @@
       .item-sep::before, .item-sep::after { background: #ccc; }
       .item-sep span { color: #bbb; }
 
-      /* Print scaling by count */
-      .specials-grid[data-count="1"] .special-card  { padding: 0.45in 0.42in; }
-      .specials-grid[data-count="1"] .card-header   { font-size: 7pt; margin-bottom: 10pt; }
-      .specials-grid[data-count="1"] .card-header-rule { margin-bottom: 12pt; }
-      .specials-grid[data-count="1"] .card-title    { font-size: 22pt; }
-      .specials-grid[data-count="1"] .card-description { font-size: 12.5pt; margin-top: 5pt; }
-      .specials-grid[data-count="1"] .card-price    { font-size: 16pt; margin-top: 8pt; }
-      .specials-grid[data-count="1"] .item-sep      { margin: 12pt auto; width: 1.8in; }
-      .specials-grid[data-count="1"] .item-sep span { font-size: 8pt; }
+      .specials-grid[data-count="1"] .special-card      { padding: 0.45in 0.42in; }
+      .specials-grid[data-count="1"] .card-header       { font-size: 7pt; margin-bottom: 10pt; }
+      .specials-grid[data-count="1"] .card-header-rule  { margin-bottom: 12pt; }
+      .specials-grid[data-count="1"] .card-title        { font-size: 22pt; }
+      .specials-grid[data-count="1"] .card-description  { font-size: 12.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="1"] .card-price        { font-size: 16pt; margin-top: 8pt; }
+      .specials-grid[data-count="1"] .item-sep          { margin: 12pt auto; width: 1.8in; }
+      .specials-grid[data-count="1"] .item-sep span     { font-size: 8pt; }
 
-      .specials-grid[data-count="2"] .special-card  { padding: 0.42in 0.40in; }
-      .specials-grid[data-count="2"] .card-header   { font-size: 6.5pt; margin-bottom: 8pt; }
-      .specials-grid[data-count="2"] .card-header-rule { margin-bottom: 10pt; }
-      .specials-grid[data-count="2"] .card-title    { font-size: 17pt; }
-      .specials-grid[data-count="2"] .card-description { font-size: 11.5pt; margin-top: 4pt; }
-      .specials-grid[data-count="2"] .card-price    { font-size: 13pt; margin-top: 6pt; }
-      .specials-grid[data-count="2"] .item-sep      { margin: 10pt auto; width: 1.6in; }
-      .specials-grid[data-count="2"] .item-sep span { font-size: 7.5pt; }
+      .specials-grid[data-count="2"] .special-card      { padding: 0.42in 0.40in; }
+      .specials-grid[data-count="2"] .card-header       { font-size: 6.5pt; margin-bottom: 8pt; }
+      .specials-grid[data-count="2"] .card-header-rule  { margin-bottom: 10pt; }
+      .specials-grid[data-count="2"] .card-title        { font-size: 17pt; }
+      .specials-grid[data-count="2"] .card-description  { font-size: 11.5pt; margin-top: 4pt; }
+      .specials-grid[data-count="2"] .card-price        { font-size: 13pt; margin-top: 6pt; }
+      .specials-grid[data-count="2"] .item-sep          { margin: 10pt auto; width: 1.6in; }
+      .specials-grid[data-count="2"] .item-sep span     { font-size: 7.5pt; }
 
-      .specials-grid[data-count="3"] .special-card  { padding: 0.38in 0.38in; }
-      .specials-grid[data-count="3"] .card-header   { font-size: 6pt; margin-bottom: 7pt; }
-      .specials-grid[data-count="3"] .card-header-rule { margin-bottom: 8pt; }
-      .specials-grid[data-count="3"] .card-title    { font-size: 14pt; }
-      .specials-grid[data-count="3"] .card-description { font-size: 10.5pt; margin-top: 3pt; }
-      .specials-grid[data-count="3"] .card-price    { font-size: 11.5pt; margin-top: 5pt; }
-      .specials-grid[data-count="3"] .item-sep      { margin: 7pt auto; width: 1.4in; }
-      .specials-grid[data-count="3"] .item-sep span { font-size: 7pt; }
+      .specials-grid[data-count="3"] .special-card      { padding: 0.38in 0.38in; }
+      .specials-grid[data-count="3"] .card-header       { font-size: 6pt; margin-bottom: 7pt; }
+      .specials-grid[data-count="3"] .card-header-rule  { margin-bottom: 8pt; }
+      .specials-grid[data-count="3"] .card-title        { font-size: 14pt; }
+      .specials-grid[data-count="3"] .card-description  { font-size: 10.5pt; margin-top: 3pt; }
+      .specials-grid[data-count="3"] .card-price        { font-size: 11.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="3"] .item-sep          { margin: 7pt auto; width: 1.4in; }
+      .specials-grid[data-count="3"] .item-sep span     { font-size: 7pt; }
 
-      .specials-grid[data-count="4"] .special-card  { padding: 0.3in 0.35in; }
-      .specials-grid[data-count="4"] .card-header   { font-size: 5.5pt; margin-bottom: 6pt; }
-      .specials-grid[data-count="4"] .card-header-rule { margin-bottom: 7pt; }
-      .specials-grid[data-count="4"] .card-title    { font-size: 12pt; }
-      .specials-grid[data-count="4"] .card-description { font-size: 10pt; margin-top: 2pt; }
-      .specials-grid[data-count="4"] .card-price    { font-size: 10pt; margin-top: 4pt; }
-      .specials-grid[data-count="4"] .item-sep      { margin: 5pt auto; width: 1.2in; }
-      .specials-grid[data-count="4"] .item-sep span { font-size: 6.5pt; }
+      .specials-grid[data-count="4"] .special-card      { padding: 0.3in 0.35in; }
+      .specials-grid[data-count="4"] .card-header       { font-size: 5.5pt; margin-bottom: 6pt; }
+      .specials-grid[data-count="4"] .card-header-rule  { margin-bottom: 7pt; }
+      .specials-grid[data-count="4"] .card-title        { font-size: 12pt; }
+      .specials-grid[data-count="4"] .card-description  { font-size: 10pt; margin-top: 2pt; }
+      .specials-grid[data-count="4"] .card-price        { font-size: 10pt; margin-top: 4pt; }
+      .specials-grid[data-count="4"] .item-sep          { margin: 5pt auto; width: 1.2in; }
+      .specials-grid[data-count="4"] .item-sep span     { font-size: 6.5pt; }
 
-      .specials-grid[data-count="5"] .special-card  { padding: 0.22in 0.32in; }
-      .specials-grid[data-count="5"] .card-header   { font-size: 5pt; margin-bottom: 5pt; }
-      .specials-grid[data-count="5"] .card-header-rule { margin-bottom: 6pt; }
-      .specials-grid[data-count="5"] .card-title    { font-size: 10.5pt; }
-      .specials-grid[data-count="5"] .card-description { font-size: 9.5pt; margin-top: 2pt; }
-      .specials-grid[data-count="5"] .card-price    { font-size: 9pt; margin-top: 3pt; }
-      .specials-grid[data-count="5"] .item-sep      { margin: 4pt auto; width: 1in; }
-      .specials-grid[data-count="5"] .item-sep span { font-size: 6pt; }
+      .specials-grid[data-count="5"] .special-card      { padding: 0.22in 0.32in; }
+      .specials-grid[data-count="5"] .card-header       { font-size: 5pt; margin-bottom: 5pt; }
+      .specials-grid[data-count="5"] .card-header-rule  { margin-bottom: 6pt; }
+      .specials-grid[data-count="5"] .card-title        { font-size: 10.5pt; }
+      .specials-grid[data-count="5"] .card-description  { font-size: 9.5pt; margin-top: 2pt; }
+      .specials-grid[data-count="5"] .card-price        { font-size: 9pt; margin-top: 3pt; }
+      .specials-grid[data-count="5"] .item-sep          { margin: 4pt auto; width: 1in; }
+      .specials-grid[data-count="5"] .item-sep span     { font-size: 6pt; }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1 class="app-title">Tonight's Specials</h1>
 
-    <div class="form-card">
-      <!-- Optional header -->
-      <div class="header-row">
-        <div class="section-label">Slip header <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></div>
-        <input type="text" id="slip-header" placeholder="Tonight's Specials" />
+    <div class="app-header">
+      <span class="status-dot" id="status-dot"></span>
+      <h1 class="app-title">Loft Specials</h1>
+    </div>
+
+    <!-- Tonight's Specials -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="section-label">Tonight's Specials</span>
       </div>
-
-      <!-- Dynamic specials list -->
-      <div id="specials-list"></div>
-
-      <button class="btn-add" id="btn-add" onclick="addItem()">+ Add Special</button>
-
+      <input type="text" id="slip-header" placeholder="Tonight's Specials" />
+      <div id="active-list"></div>
+      <div class="custom-form hidden" id="custom-form">
+        <input type="text" id="custom-title" placeholder="Dish name" />
+        <input type="text" id="custom-desc" placeholder="Description" />
+        <input type="text" id="custom-price" placeholder="Price — e.g. $28" />
+        <div class="btn-sm-row">
+          <button class="btn-ghost" onclick="hideCustom()">Cancel</button>
+          <button class="btn-primary" onclick="addCustom()">Add to Tonight</button>
+        </div>
+      </div>
+      <button class="btn-dashed" id="btn-custom">+ Custom Item</button>
       <div class="btn-row">
         <button class="btn-clear" onclick="clearAll()">Clear</button>
         <button class="btn-print" onclick="window.print()">Print</button>
       </div>
-      <p class="print-tip">In Safari's print dialog → uncheck <strong>Print headers and footers</strong></p>
+      <p class="print-tip">Safari → uncheck <strong>Print headers and footers</strong></p>
     </div>
 
+    <!-- Menu Library -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="section-label">Menu Library</span>
+        <button class="btn-primary" onclick="showForm(null)">+ New Item</button>
+      </div>
+      <div class="item-form hidden" id="item-form">
+        <input type="text" id="form-title" placeholder="Dish name" />
+        <textarea id="form-desc" placeholder="Description"></textarea>
+        <input type="text" id="form-price" placeholder="Price — e.g. $28" />
+        <div class="btn-sm-row">
+          <button class="btn-ghost" onclick="hideForm()">Cancel</button>
+          <button class="btn-primary" onclick="saveItem()">Save to Library</button>
+        </div>
+      </div>
+      <div id="library-grid"></div>
+    </div>
+
+    <!-- Print preview -->
     <div class="preview-wrap">
       <div class="preview-label">Preview — 4 per sheet, cut on dashed lines</div>
       <div class="specials-grid" id="grid"></div>
     </div>
+
   </div>
 
-  <script>
-    const MAX = 5;
-    let items = [{ title: '', desc: '', price: '' }];
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+    import { getFirestore, collection, doc, onSnapshot, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+    import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
-    function esc(s) {
-      const d = document.createElement('div');
-      d.textContent = s;
-      return d.innerHTML;
+    const firebaseConfig = {
+      apiKey: "AIzaSyAAe7KTCph09PsEBPgLF7tEXOOv2f0Xos8",
+      authDomain: "loftdb-15393.firebaseapp.com",
+      projectId: "loftdb-15393",
+      storageBucket: "loftdb-15393.firebasestorage.app",
+      messagingSenderId: "925271690412",
+      appId: "1:925271690412:web:e91da974380c6a24756309"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const db    = getFirestore(fbApp);
+    const auth  = getAuth(fbApp);
+
+    // ── State ──
+    let library   = [];   // { id, title, description, price }[]
+    let active    = [];   // { title, description, price }[]  max 5
+    let editingId = null;
+    let listenersStarted = false;
+
+    // ── Auth ──
+    const dot = document.getElementById('status-dot');
+    signInAnonymously(auth).catch(e => console.error('Auth:', e));
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        dot.classList.add('connected');
+        if (!listenersStarted) {
+          listenersStarted = true;
+          startListeners();
+        }
+      } else {
+        dot.classList.remove('connected');
+      }
+    });
+
+    function startListeners() {
+      // Library — real-time, sorted alphabetically
+      onSnapshot(collection(db, 'specials_library'), snap => {
+        library = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        renderLibrary();
+      });
+
+      // Active specials — real-time, shared across all devices
+      onSnapshot(doc(db, 'active_specials', 'current'), snap => {
+        if (snap.exists()) {
+          const data = snap.data();
+          active = data.items || [];
+          const hdr = data.header || '';
+          const el = document.getElementById('slip-header');
+          if (document.activeElement !== el) el.value = hdr;
+        } else {
+          active = [];
+        }
+        renderActive();
+        renderCard();
+      });
     }
 
-    /* ── FORM ── */
-    function renderForm() {
-      const list = document.getElementById('specials-list');
-      list.innerHTML = items.map((item, i) => `
-        <div class="special-item">
-          <div class="item-header">
-            <span class="item-num">Special ${i + 1}</span>
-            ${items.length > 1
-              ? `<button class="btn-remove" onclick="removeItem(${i})" title="Remove">✕</button>`
-              : ''}
-          </div>
-          <div class="item-fields">
-            <input type="text" placeholder="Dish name" value="${esc(item.title)}"
-              oninput="update(${i},'title',this.value)" />
-            <textarea placeholder="Description (ingredients, prep style…)"
-              oninput="update(${i},'desc',this.value)">${esc(item.desc)}</textarea>
-            <div class="field-row">
-              <input type="text" placeholder="Price — e.g. $28" value="${esc(item.price)}"
-                oninput="update(${i},'price',this.value)" />
+    // ── Render: Tonight's active list ──
+    function renderActive() {
+      const el = document.getElementById('active-list');
+      const btnCustom = document.getElementById('btn-custom');
+
+      if (active.length === 0) {
+        el.innerHTML = '<div class="active-empty">Tap items from the library to add them</div>';
+      } else {
+        el.innerHTML = active.map((item, i) => `
+          <div class="active-item">
+            <span class="active-num">${i + 1}</span>
+            <div class="active-info">
+              <div class="active-title">${esc(item.title)}</div>
+              ${item.description ? `<div class="active-desc">${esc(item.description)}</div>` : ''}
+              ${item.price ? `<div class="active-price">${esc(item.price)}</div>` : ''}
             </div>
+            <button class="btn-x" onclick="removeActive(${i})">✕</button>
+          </div>`).join('');
+      }
+
+      const atMax = active.length >= 5;
+      btnCustom.style.display = atMax ? 'none' : '';
+      if (atMax) hideCustom();
+
+      renderLibrary();
+      renderCard();
+    }
+
+    // ── Render: Library grid ──
+    function renderLibrary() {
+      const grid = document.getElementById('library-grid');
+      const atMax = active.length >= 5;
+
+      if (library.length === 0) {
+        grid.innerHTML = '<div class="lib-empty">Library is empty — tap + New Item to add your first special</div>';
+        return;
+      }
+
+      grid.innerHTML = library.map(item => `
+        <div class="lib-card${atMax ? ' at-max' : ''}" onclick="tapLib('${item.id}')">
+          <div class="lib-card-actions">
+            <button class="btn-icon" onclick="event.stopPropagation();editItem('${item.id}')" title="Edit">✎</button>
+            <button class="btn-icon del" onclick="event.stopPropagation();deleteItem('${item.id}')" title="Remove">✕</button>
           </div>
+          <div class="lib-title">${esc(item.title)}</div>
+          ${item.description ? `<div class="lib-desc">${esc(item.description)}</div>` : ''}
+          <div class="lib-price">${esc(item.price)}</div>
         </div>`).join('');
-
-      document.getElementById('btn-add').style.display =
-        items.length >= MAX ? 'none' : 'block';
-
-      // Re-bind header input (static, not rebuilt)
-      renderCard();
     }
 
-    function update(i, field, val) {
-      items[i][field] = val;
-      renderCard();
-    }
-
-    function addItem() {
-      if (items.length >= MAX) return;
-      items.push({ title: '', desc: '', price: '' });
-      renderForm();
-    }
-
-    function removeItem(i) {
-      items.splice(i, 1);
-      renderForm();
-    }
-
-    function clearAll() {
-      items = [{ title: '', desc: '', price: '' }];
-      document.getElementById('slip-header').value = '';
-      renderForm();
-    }
-
-    /* ── CARD RENDER ── */
+    // ── Render: Print card preview ──
     function renderCard() {
       const header = document.getElementById('slip-header').value.trim();
+      const items  = active.length > 0
+        ? active
+        : [{ title: 'Dish Name', description: 'description', price: '$—' }];
       const n = items.length;
 
       const headerHtml = header
-        ? `<div class="card-header">${esc(header)}</div>
-           <div class="card-header-rule"></div>`
+        ? `<div class="card-header">${esc(header)}</div><div class="card-header-rule"></div>`
         : '';
 
       const specialsHtml = items.map((item, i) => {
         const sep = i < items.length - 1
           ? `<div class="item-sep"><span>✦</span></div>`
           : '';
-        return `
-          <div class="card-special">
-            <div class="card-title">${esc(item.title) || 'Dish Name'}</div>
-            <div class="card-description">${esc(item.desc) || 'description'}</div>
-            <div class="card-price">${esc(item.price) || '$—'}</div>
-          </div>
-          ${sep}`;
+        return `<div class="card-special">
+          <div class="card-title">${esc(item.title) || 'Dish Name'}</div>
+          ${item.description ? `<div class="card-description">${esc(item.description)}</div>` : ''}
+          ${item.price ? `<div class="card-price">${esc(item.price)}</div>` : ''}
+        </div>${sep}`;
       }).join('');
 
-      const card = `
-        <div class="special-card">
-          ${headerHtml}
-          ${specialsHtml}
-        </div>`;
-
+      const card = `<div class="special-card">${headerHtml}${specialsHtml}</div>`;
       const grid = document.getElementById('grid');
       grid.dataset.count = n;
       grid.innerHTML = card + card + card + card;
     }
 
-    // Bind header input
-    document.getElementById('slip-header').addEventListener('input', renderCard);
+    // ── Active: add / remove / clear ──
+    async function addToActive(item) {
+      if (active.length >= 5) return;
+      active = [...active, {
+        title: item.title || '',
+        description: item.description || '',
+        price: item.price || ''
+      }];
+      await persistActive();
+    }
 
-    // Init
-    renderForm();
+    async function removeActive(i) {
+      active = active.filter((_, idx) => idx !== i);
+      await persistActive();
+    }
+
+    async function clearAll() {
+      active = [];
+      document.getElementById('slip-header').value = '';
+      await persistActive();
+    }
+
+    async function persistActive() {
+      await setDoc(doc(db, 'active_specials', 'current'), {
+        header: document.getElementById('slip-header').value.trim(),
+        items: active,
+        updatedAt: serverTimestamp()
+      });
+    }
+
+    // ── Library: tap to add tonight ──
+    function tapLib(id) {
+      if (active.length >= 5) return;
+      const item = library.find(i => i.id === id);
+      if (item) addToActive(item);
+    }
+
+    // ── Library: add / edit form ──
+    function showForm(id) {
+      editingId = id;
+      const form = document.getElementById('item-form');
+      form.classList.remove('hidden');
+      if (id) {
+        const item = library.find(i => i.id === id);
+        document.getElementById('form-title').value = item?.title || '';
+        document.getElementById('form-desc').value  = item?.description || '';
+        document.getElementById('form-price').value = item?.price || '';
+      } else {
+        document.getElementById('form-title').value = '';
+        document.getElementById('form-desc').value  = '';
+        document.getElementById('form-price').value = '';
+      }
+      document.getElementById('form-title').focus();
+    }
+
+    function hideForm() {
+      editingId = null;
+      document.getElementById('item-form').classList.add('hidden');
+    }
+
+    async function saveItem() {
+      const title = document.getElementById('form-title').value.trim();
+      if (!title) { document.getElementById('form-title').focus(); return; }
+      const data = {
+        title,
+        description: document.getElementById('form-desc').value.trim(),
+        price: document.getElementById('form-price').value.trim(),
+        updatedAt: serverTimestamp()
+      };
+      if (editingId) {
+        await updateDoc(doc(db, 'specials_library', editingId), data);
+      } else {
+        await addDoc(collection(db, 'specials_library'), { ...data, createdAt: serverTimestamp() });
+      }
+      hideForm();
+    }
+
+    function editItem(id) { showForm(id); }
+
+    async function deleteItem(id) {
+      if (!confirm('Remove from library?')) return;
+      await deleteDoc(doc(db, 'specials_library', id));
+    }
+
+    // ── Custom one-off item (not saved to library) ──
+    function showCustom() {
+      document.getElementById('custom-form').classList.remove('hidden');
+      document.getElementById('btn-custom').style.display = 'none';
+      document.getElementById('custom-title').value = '';
+      document.getElementById('custom-desc').value  = '';
+      document.getElementById('custom-price').value = '';
+      document.getElementById('custom-title').focus();
+    }
+
+    function hideCustom() {
+      document.getElementById('custom-form').classList.add('hidden');
+      if (active.length < 5) document.getElementById('btn-custom').style.display = '';
+    }
+
+    async function addCustom() {
+      const title = document.getElementById('custom-title').value.trim();
+      if (!title) { document.getElementById('custom-title').focus(); return; }
+      await addToActive({
+        title,
+        description: document.getElementById('custom-desc').value.trim(),
+        price: document.getElementById('custom-price').value.trim()
+      });
+      hideCustom();
+    }
+
+    // ── Slip header: debounced sync to Firestore ──
+    let hdrTimer;
+    document.getElementById('slip-header').addEventListener('input', () => {
+      renderCard();
+      clearTimeout(hdrTimer);
+      hdrTimer = setTimeout(persistActive, 700);
+    });
+
+    document.getElementById('btn-custom').addEventListener('click', showCustom);
+
+    // ── Escape key closes forms ──
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { hideForm(); hideCustom(); }
+    });
+
+    // ── Utility ──
+    function esc(s) {
+      if (!s) return '';
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // Expose to inline onclick handlers (required for type="module")
+    Object.assign(window, {
+      removeActive, clearAll, tapLib,
+      showForm, hideForm, saveItem, editItem, deleteItem,
+      showCustom, hideCustom, addCustom
+    });
+
+    // Initial render before Firestore responds
+    renderActive();
+    renderCard();
   </script>
 </body>
 </html>
