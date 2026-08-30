@@ -312,10 +312,10 @@
     .btn-icon {
       background: none;
       border: none;
-      color: #ccc;
-      font-size: 0.78rem;
-      width: 22px;
-      height: 22px;
+      color: #999;
+      font-size: 0.85rem;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -408,7 +408,7 @@
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #aaa;
+      color: #666;
       margin-bottom: 8px;
     }
 
@@ -454,35 +454,35 @@
     .item-sep span { color: #ccc; padding: 0 6px; line-height: 1; }
 
     /* Screen font scaling by item count */
-    .specials-grid[data-count="1"] .card-header      { font-size: clamp(7px, 1.1vw, 9px); }
+    .specials-grid[data-count="1"] .card-header      { font-size: clamp(8px, 1.3vw, 11px); }
     .specials-grid[data-count="1"] .card-title       { font-size: clamp(12px, 2.8vw, 22px); }
     .specials-grid[data-count="1"] .card-description { font-size: clamp(10px, 1.7vw, 14px); }
     .specials-grid[data-count="1"] .card-price       { font-size: clamp(11px, 2.2vw, 17px); }
     .specials-grid[data-count="1"] .item-sep         { margin: 8px auto; }
     .specials-grid[data-count="1"] .item-sep span    { font-size: 10px; }
 
-    .specials-grid[data-count="2"] .card-header      { font-size: clamp(6px, 1vw, 8px); }
+    .specials-grid[data-count="2"] .card-header      { font-size: clamp(7px, 1.1vw, 10px); }
     .specials-grid[data-count="2"] .card-title       { font-size: clamp(11px, 2.3vw, 18px); }
     .specials-grid[data-count="2"] .card-description { font-size: clamp(9px, 1.5vw, 12px); }
     .specials-grid[data-count="2"] .card-price       { font-size: clamp(10px, 1.9vw, 15px); }
     .specials-grid[data-count="2"] .item-sep         { margin: 7px auto; }
     .specials-grid[data-count="2"] .item-sep span    { font-size: 9px; }
 
-    .specials-grid[data-count="3"] .card-header      { font-size: clamp(6px, 0.9vw, 8px); }
+    .specials-grid[data-count="3"] .card-header      { font-size: clamp(7px, 1vw, 9px); }
     .specials-grid[data-count="3"] .card-title       { font-size: clamp(10px, 1.9vw, 15px); }
     .specials-grid[data-count="3"] .card-description { font-size: clamp(8.5px, 1.3vw, 11px); }
     .specials-grid[data-count="3"] .card-price       { font-size: clamp(9px, 1.6vw, 13px); }
     .specials-grid[data-count="3"] .item-sep         { margin: 5px auto; }
     .specials-grid[data-count="3"] .item-sep span    { font-size: 8px; }
 
-    .specials-grid[data-count="4"] .card-header      { font-size: clamp(5.5px, 0.85vw, 7px); }
+    .specials-grid[data-count="4"] .card-header      { font-size: clamp(6px, 0.9vw, 8px); }
     .specials-grid[data-count="4"] .card-title       { font-size: clamp(9px, 1.6vw, 13px); }
     .specials-grid[data-count="4"] .card-description { font-size: clamp(8px, 1.2vw, 10px); }
     .specials-grid[data-count="4"] .card-price       { font-size: clamp(8px, 1.4vw, 11px); }
     .specials-grid[data-count="4"] .item-sep         { margin: 4px auto; }
     .specials-grid[data-count="4"] .item-sep span    { font-size: 7px; }
 
-    .specials-grid[data-count="5"] .card-header      { font-size: clamp(5px, 0.8vw, 6.5px); }
+    .specials-grid[data-count="5"] .card-header      { font-size: clamp(6px, 0.85vw, 7.5px); }
     .specials-grid[data-count="5"] .card-title       { font-size: clamp(8px, 1.4vw, 11px); }
     .specials-grid[data-count="5"] .card-description { font-size: clamp(7.5px, 1.1vw, 9.5px); }
     .specials-grid[data-count="5"] .card-price       { font-size: clamp(7px, 1.2vw, 10px); }
@@ -499,6 +499,7 @@
         width: 100% !important;
         height: 100% !important;
         background: white !important;
+        overflow: hidden !important;
       }
 
       .app-header, .panel, .preview-label { display: none !important; }
@@ -546,12 +547,13 @@
       .special-card:nth-child(1),
       .special-card:nth-child(3) { border-right: 1px dashed #bbb; }
 
-      .card-header-rule { background: #ccc; }
+      .card-header { color: #555; }
+      .card-header-rule { background: #bbb; }
       .item-sep::before, .item-sep::after { background: #ccc; }
       .item-sep span { color: #bbb; }
 
       .specials-grid[data-count="1"] .special-card      { padding: 0.45in 0.42in; }
-      .specials-grid[data-count="1"] .card-header       { font-size: 7pt; margin-bottom: 10pt; }
+      .specials-grid[data-count="1"] .card-header       { font-size: 8.5pt; margin-bottom: 10pt; }
       .specials-grid[data-count="1"] .card-header-rule  { margin-bottom: 12pt; }
       .specials-grid[data-count="1"] .card-title        { font-size: 22pt; }
       .specials-grid[data-count="1"] .card-description  { font-size: 12.5pt; margin-top: 5pt; }
@@ -560,7 +562,7 @@
       .specials-grid[data-count="1"] .item-sep span     { font-size: 8pt; }
 
       .specials-grid[data-count="2"] .special-card      { padding: 0.42in 0.40in; }
-      .specials-grid[data-count="2"] .card-header       { font-size: 6.5pt; margin-bottom: 8pt; }
+      .specials-grid[data-count="2"] .card-header       { font-size: 8pt; margin-bottom: 8pt; }
       .specials-grid[data-count="2"] .card-header-rule  { margin-bottom: 10pt; }
       .specials-grid[data-count="2"] .card-title        { font-size: 17pt; }
       .specials-grid[data-count="2"] .card-description  { font-size: 11.5pt; margin-top: 4pt; }
@@ -569,7 +571,7 @@
       .specials-grid[data-count="2"] .item-sep span     { font-size: 7.5pt; }
 
       .specials-grid[data-count="3"] .special-card      { padding: 0.38in 0.38in; }
-      .specials-grid[data-count="3"] .card-header       { font-size: 6pt; margin-bottom: 7pt; }
+      .specials-grid[data-count="3"] .card-header       { font-size: 7.5pt; margin-bottom: 7pt; }
       .specials-grid[data-count="3"] .card-header-rule  { margin-bottom: 8pt; }
       .specials-grid[data-count="3"] .card-title        { font-size: 14pt; }
       .specials-grid[data-count="3"] .card-description  { font-size: 10.5pt; margin-top: 3pt; }
@@ -578,7 +580,7 @@
       .specials-grid[data-count="3"] .item-sep span     { font-size: 7pt; }
 
       .specials-grid[data-count="4"] .special-card      { padding: 0.3in 0.35in; }
-      .specials-grid[data-count="4"] .card-header       { font-size: 5.5pt; margin-bottom: 6pt; }
+      .specials-grid[data-count="4"] .card-header       { font-size: 7pt; margin-bottom: 6pt; }
       .specials-grid[data-count="4"] .card-header-rule  { margin-bottom: 7pt; }
       .specials-grid[data-count="4"] .card-title        { font-size: 12pt; }
       .specials-grid[data-count="4"] .card-description  { font-size: 10pt; margin-top: 2pt; }
@@ -587,7 +589,7 @@
       .specials-grid[data-count="4"] .item-sep span     { font-size: 6.5pt; }
 
       .specials-grid[data-count="5"] .special-card      { padding: 0.22in 0.32in; }
-      .specials-grid[data-count="5"] .card-header       { font-size: 5pt; margin-bottom: 5pt; }
+      .specials-grid[data-count="5"] .card-header       { font-size: 6.5pt; margin-bottom: 5pt; }
       .specials-grid[data-count="5"] .card-header-rule  { margin-bottom: 6pt; }
       .specials-grid[data-count="5"] .card-title        { font-size: 10.5pt; }
       .specials-grid[data-count="5"] .card-description  { font-size: 9.5pt; margin-top: 2pt; }
