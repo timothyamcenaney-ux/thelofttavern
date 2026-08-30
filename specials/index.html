@@ -627,16 +627,16 @@
       .special-card:nth-child(3) { border-right: 1px dashed #bbb; }
 
       .card-header { color: #555; }
-      .card-header-rule { background: #bbb; }
-      .item-sep::before, .item-sep::after { background: #ccc; }
-      .item-sep span { color: #bbb; }
+      .card-header-rule { background: #999; }
+      .item-sep::before, .item-sep::after { background: #777; }
+      .item-sep span { color: #777; }
 
-      /* Footer: fixed 11pt, dark gray, regardless of item count */
-      .card-foot { border-top-color: #ccc; margin-top: 10pt; padding-top: 5pt; }
-      .card-foot-text { font-size: 11pt; color: #333; }
+      /* Footer: fixed sizing overridden inline per character count */
+      .card-foot { border-top-color: #999; margin-top: 10pt; padding-top: 5pt; }
+      .card-foot-text { color: #333; }
 
       /* Announcement print colors */
-      .card-announce-sep { background: #ccc; }
+      .card-announce-sep { background: #999; }
       .card-announcement { color: #222; }
 
       .specials-grid[data-count="1"] .special-card      { padding: 0.45in 0.42in; }
@@ -916,8 +916,15 @@
            <div class="card-announcement">${esc(announcement)}</div>`
         : '';
 
+      // Scale footer font down by character count to stay one line
+      const fLen = footer.length;
+      const fSize = fLen <= 42 ? '11pt'
+                  : fLen <= 54 ? '9.5pt'
+                  : fLen <= 66 ? '8pt'
+                  : '7pt';
+
       const footHtml = footer
-        ? `<div class="card-foot"><div class="card-foot-text">${esc(footer)}</div></div>`
+        ? `<div class="card-foot"><div class="card-foot-text" style="font-size:${fSize}">${esc(footer)}</div></div>`
         : '';
 
       const card = `<div class="special-card">
