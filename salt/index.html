@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salt Level — The Loft Tavern</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>
+    .salt-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .salt-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 500px) {
+      .salt-cards { grid-template-columns: 1fr; }
+    }
+
+    .salt-card {
+      background: var(--snow);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .salt-card-label {
+      font-family: var(--font-display);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 0.6rem;
+    }
+
+    .salt-big {
+      font-family: var(--font-display);
+      font-size: 3.8rem;
+      font-weight: 700;
+      color: var(--barn);
+      line-height: 1;
+    }
+
+    .salt-big-unit {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--slate);
+      margin-left: 0.15rem;
+    }
+
+    .salt-sub {
+      font-size: 0.82rem;
+      color: var(--slate);
+      margin-top: 0.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      margin-bottom: 0.9rem;
+    }
+
+    .badge-ok       { background: #e8f5e9; color: #2e7d32; }
+    .badge-low      { background: #fff3e0; color: #e65100; }
+    .badge-critical { background: #fdecea; color: #b03a2e; }
+    .badge-loading  { background: #f5f5f5; color: var(--slate); }
+
+    .salt-meta {
+      font-size: 0.85rem;
+      color: var(--slate);
+      line-height: 2;
+    }
+
+    .salt-meta strong {
+      color: var(--barn);
+      font-weight: 500;
+    }
+
+    .salt-chart-card {
+      background: var(--snow);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.25rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .salt-chart-label {
+      font-family: var(--font-display);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 1rem;
+    }
+
+    .salt-chart-wrap {
+      position: relative;
+      height: 230px;
+    }
+
+    .salt-note {
+      font-size: 0.8rem;
+      color: var(--slate);
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-top: 0.25rem;
+      line-height: 1.65;
+    }
+
+    .btn-refresh {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.45rem 1rem;
+      color: var(--slate);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-refresh:hover { border-color: var(--barn); color: var(--barn); }
+
+    .salt-about {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .salt-about h2 {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 0.75rem;
+    }
+
+    .salt-about p {
+      font-size: 0.9rem;
+      color: var(--slate);
+      line-height: 1.7;
+      margin-bottom: 0.75rem;
+    }
+
+    .salt-about p:last-child { margin-bottom: 0; }
+
+    #status-msg {
+      font-size: 0.9rem;
+      color: var(--slate);
+      font-style: italic;
+      padding: 2.5rem 0;
+    }
+
+    #error-msg {
+      font-size: 0.9rem;
+      color: #b03a2e;
+      padding: 2rem 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="wrap nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <img src="../images/letsgetlofted.png" alt="The Loft Tavern" class="nav-logo-img" />
+      </a>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../food_menu.html">Food</a></li>
+        <li><a href="../drink_menu.html">Drinks</a></li>
+        <li><a href="../hours.html">Hours</a></li>
+        <li class="gift-cards">
+          <a href="https://app.squareup.com/gift/MLZ9HCJG33P9N/order" target="_blank" rel="noopener">🎁 Gift Cards</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="loft-status-bar"></div>
+  <script src="../hours-status.js"></script>
+
+  <main class="page-content">
+    <div class="wrap">
+
+      <div class="salt-header">
+        <div>
+          <h1 class="section-title">Salt Level</h1>
+          <p class="section-sub">Water softener brine tank — live sensor</p>
+        </div>
+        <button class="btn-refresh" onclick="loadData()">↻ Refresh</button>
+      </div>
+
+      <div id="status-msg">Loading sensor data...</div>
+      <div id="error-msg" style="display:none"></div>
+
+      <div id="salt-content" style="display:none">
+
+        <div class="salt-cards">
+          <div class="salt-card">
+            <div class="salt-card-label">Distance from sensor</div>
+            <div>
+              <span class="salt-big" id="dist-in">—</span><span class="salt-big-unit">in</span>
+            </div>
+            <div class="salt-sub" id="dist-cm"></div>
+          </div>
+
+          <div class="salt-card">
+            <div id="state-badge" class="badge badge-loading">—</div>
+            <div class="salt-meta">
+              <span id="level-line"></span>
+              Signal: <strong id="rssi-val">—</strong><br />
+              Updated: <strong id="updated-at">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="salt-chart-card">
+          <div class="salt-chart-label">History — distance from sensor over time</div>
+          <div class="salt-chart-wrap">
+            <canvas id="saltChart"></canvas>
+          </div>
+        </div>
+
+        <p class="salt-note">
+          Sensor mounted through lid, pointing down at salt surface. Distance increases as salt depletes.
+          Level % is calculated from a 30-inch barrel depth. Alert threshold: 15%.
+        </p>
+
+        <div class="salt-about">
+          <h2>About This System</h2>
+          <p>The Loft's water supply comes from a private well. Before reaching any fixture, it passes through an iron filtration and water softening system that removes iron bacteria, sediment, and hard minerals. The softener works by running water through a resin bed that captures calcium and magnesium ions — salt is what regenerates that resin during periodic backwash cycles, flushing the captured minerals out and resetting the system.</p>
+          <p>When salt runs out, the resin can no longer regenerate. Hard, iron-laden water bypasses treatment and reaches the ice machine, glasswasher, coffee equipment, and taps — accelerating scale buildup, staining fixtures, and allowing iron bacteria to re-establish in lines that were previously clean. This monitor exists to catch depletion before that happens.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <h4>Hours</h4>
+          <p>
+            Mon – Weds: Closed<br />
+            Thursday: 11:30 AM – 10 PM<br />
+            Friday: 11:30 AM – 10 PM<br />
+            Saturday: 11:30 AM – 10 PM<br />
+            Sunday: 11:30 AM – 9 PM
+          </p>
+          <a href="../hours.html" class="btn btn-outline mt-2" style="font-size:.78rem; padding:.4rem 1rem;">Full Hours &amp; Info</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Find Us</h4>
+          <address>
+            The Loft Tavern<br />
+            300 Mountain Road<br />
+            Ludlow, VT 05149<br /><br />
+            <a href="tel:+18029750322">(802) 975-0322</a><br /><br />
+            <a href="https://instagram.com/thelofttavern" target="_blank" rel="noopener">Instagram</a>
+            &nbsp;·&nbsp;
+            <a href="https://facebook.com/thelofttavern" target="_blank" rel="noopener">Facebook</a>
+          </address>
+        </div>
+
+        <div class="footer-col">
+          <h4>Map</h4>
+          <div class="footer-map">
+            <iframe src="https://www.google.com/maps?q=The+Loft+Tavern+Ludlow+VT&output=embed" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" title="The Loft Tavern location" allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-logo">The <span>Loft</span> Tavern</div>
+        <p class="footer-copy">&copy; 2026 The Loft Tavern · Ludlow, VT · Base of Okemo Mountain</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_KEY = 'AIzaSyAAe7KTCph09PsEBPgLF7tEXOOv2f0Xos8';
+    const PROJECT = 'loftdb-15393';
+    let chart = null;
+
+    function parseField(f) {
+      if (!f) return null;
+      if ('doubleValue'  in f) return f.doubleValue;
+      if ('integerValue' in f) return parseInt(f.integerValue, 10);
+      if ('stringValue'  in f) return f.stringValue;
+      return null;
+    }
+
+    function timeAgo(isoStr) {
+      const secs = (Date.now() - new Date(isoStr).getTime()) / 1000;
+      if (secs < 90)   return Math.round(secs) + 's ago';
+      if (secs < 3600) return Math.round(secs / 60) + 'm ago';
+      if (secs < 86400) return Math.round(secs / 3600) + 'h ago';
+      return Math.round(secs / 86400) + 'd ago';
+    }
+
+    function fmtLabel(isoStr) {
+      const d = new Date(isoStr);
+      const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      return date + ' ' + time;
+    }
+
+    async function loadData() {
+      document.getElementById('status-msg').style.display = '';
+      document.getElementById('status-msg').textContent = 'Loading sensor data...';
+      document.getElementById('error-msg').style.display = 'none';
+      document.getElementById('salt-content').style.display = 'none';
+
+      try {
+        const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString();
+        const res = await fetch(
+          `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents:runQuery?key=${API_KEY}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              structuredQuery: {
+                from: [{ collectionId: 'salt_readings' }],
+                where: {
+                  fieldFilter: {
+                    field: { fieldPath: 'timestamp' },
+                    op: 'GREATER_THAN_OR_EQUAL',
+                    value: { stringValue: oneYearAgo }
+                  }
+                },
+                orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'DESCENDING' }],
+                limit: 500
+              }
+            })
+          }
+        );
+
+        const results = await res.json();
+        const docs = results
+          .filter(r => r.document && r.document.fields)
+          .map(r => {
+            const f = r.document.fields;
+            return {
+              timestamp:   parseField(f.timestamp),
+              distance_cm: parseField(f.distance_cm),
+              level_pct:   parseField(f.level_pct),
+              state:       parseField(f.state) || 'ok',
+              rssi:        parseField(f.rssi),
+            };
+          })
+          .filter(d =>
+            d.distance_cm !== null &&
+            d.distance_cm < 900 &&
+            d.timestamp &&
+            !d.timestamp.startsWith('1970')
+          );
+
+        if (docs.length === 0) throw new Error('No valid readings in database yet.');
+        render(docs);
+
+      } catch (e) {
+        document.getElementById('status-msg').style.display = 'none';
+        const el = document.getElementById('error-msg');
+        el.textContent = 'Could not load data: ' + e.message;
+        el.style.display = '';
+      }
+    }
+
+    function render(docs) {
+      const latest = docs[0];
+      const distIn = (latest.distance_cm / 2.54).toFixed(1);
+
+      document.getElementById('dist-in').textContent = distIn;
+      document.getElementById('dist-cm').textContent = latest.distance_cm.toFixed(1) + ' cm';
+
+      const lvl = latest.level_pct !== null ? `Est. level: ${Math.round(latest.level_pct)}%*<br />` : '';
+      document.getElementById('level-line').innerHTML = lvl;
+      document.getElementById('rssi-val').textContent = latest.rssi !== null ? latest.rssi + ' dBm' : '—';
+      document.getElementById('updated-at').textContent = timeAgo(latest.timestamp);
+
+      const badge = document.getElementById('state-badge');
+      const s = (latest.state || 'ok').toLowerCase();
+      badge.className = 'badge ' + (s === 'low' ? 'badge-low' : s === 'critical' ? 'badge-critical' : 'badge-ok');
+      badge.textContent = s === 'low' ? 'Low' : s === 'critical' ? 'Critical' : 'Normal';
+
+      // Chart oldest→newest, cap at barrel depth to exclude bad readings
+      const cd = [...docs].reverse();
+      const labels = cd.map(d => fmtLabel(d.timestamp));
+      const data   = cd.map(d => parseFloat((d.distance_cm / 2.54).toFixed(2)));
+      const validData = data.filter(v => v <= 35);
+      const yMin = Math.max(0, Math.floor(Math.min(...validData)) - 1);
+      const yMax = Math.min(35, Math.ceil(Math.max(...validData)) + 1);
+
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById('saltChart'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Inches from sensor',
+            data,
+            borderColor: '#D4891A',
+            backgroundColor: 'rgba(212,137,26,0.07)',
+            borderWidth: 2,
+            pointRadius: data.length > 40 ? 0 : 2,
+            pointHoverRadius: 4,
+            fill: true,
+            tension: 0.3,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.parsed.y.toFixed(1) + '" from sensor'
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                maxTicksLimit: 6,
+                maxRotation: 0,
+                font: { family: 'Inter', size: 11 },
+                color: '#8A8680',
+              },
+              grid: { color: '#E0DAD0' }
+            },
+            y: {
+              min: yMin,
+              max: yMax,
+              title: {
+                display: true,
+                text: 'Inches from sensor  (higher = lower salt)',
+                font: { family: 'Inter', size: 11 },
+                color: '#8A8680',
+              },
+              ticks: {
+                font: { family: 'Inter', size: 11 },
+                color: '#8A8680',
+                callback: v => v + '"'
+              },
+              grid: { color: '#E0DAD0' }
+            }
+          }
+        }
+      });
+
+      document.getElementById('status-msg').style.display = 'none';
+      document.getElementById('salt-content').style.display = '';
+    }
+
+    loadData();
+  </script>
+
+</body>
+</html>

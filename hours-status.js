@@ -12,7 +12,7 @@ const LOFT_HOURS = {
   1: null,               // Monday:    Closed
   2: null,               // Tuesday:   Closed
   3: null,               // Wednesday: Closed
-  4: [15, 0, 21, 0],    // Thursday:  3 PM – 9 PM
+  4: [11, 30, 22, 0],   // Thursday:  11:30 AM – 10 PM
   5: [11, 30, 22, 0],   // Friday:    11:30 AM – 10 PM
   6: [11, 30, 22, 0],   // Saturday:  11:30 AM – 10 PM
 };
@@ -21,9 +21,12 @@ const LOFT_HOURS = {
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function getLoftStatus() {
-  // Uses browser local time — visitors in Vermont will see correct status.
-  // If you want to force Vermont time regardless of visitor location,
-  // use: new Date().toLocaleString('en-US', {timeZone: 'America/New_York'})
+  // Temporary closure Sept 9–16, 2026 — remove this block after reopening
+  const reopenUTC = new Date('2026-09-17T15:30:00Z'); // Sept 17 at 11:30 AM EDT
+  if (new Date() < reopenUTC) {
+    return { open: false, label: 'Temporarily Closed', sub: 'Back Thursday, Sept 17 at 11:30 AM' };
+  }
+
   const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
   const day = now.getDay();
   const hour = now.getHours();
