@@ -20,11 +20,24 @@ const LOFT_HOURS = {
 // Day names for display
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+function closureCountdown(reopenUTC) {
+  const msLeft = reopenUTC - new Date();
+  if (msLeft <= 0) return 'Back Thursday, Sept 17 at 11:30 AM';
+  const totalMins = Math.floor(msLeft / 60000);
+  const days  = Math.floor(totalMins / 1440);
+  const hours = Math.floor((totalMins % 1440) / 60);
+  const mins  = totalMins % 60;
+  if (days >= 2)  return `Opens in ${days} days, ${hours} hr`;
+  if (days === 1) return `Opens in 1 day, ${hours} hr`;
+  if (hours >= 1) return `Opens in ${hours}h ${mins}m`;
+  return `Opens in ${mins}m`;
+}
+
 function getLoftStatus() {
   // Temporary closure Sept 9–16, 2026 — remove this block after reopening
   const reopenUTC = new Date('2026-09-17T15:30:00Z'); // Sept 17 at 11:30 AM EDT
   if (new Date() < reopenUTC) {
-    return { open: false, label: 'Temporarily Closed', sub: 'Back Thursday, Sept 17 at 11:30 AM' };
+    return { open: false, label: 'Temporarily Closed', sub: closureCountdown(reopenUTC) };
   }
 
   const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
