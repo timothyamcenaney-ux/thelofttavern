@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Loft — Specials</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Loft Specials">
+  <title>Loft Specials</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
     :root {
       --ink: #1a1a1a;
@@ -20,87 +25,52 @@
       font-family: 'Lato', sans-serif;
       background: var(--bg);
       min-height: 100vh;
-      padding: 24px 16px 60px;
+      padding: 20px 14px 60px;
       color: var(--ink);
     }
 
-    .app { max-width: 600px; margin: 0 auto; }
+    .app { max-width: 680px; margin: 0 auto; }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
 
     .app-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 600;
-      text-align: center;
-      margin-bottom: 28px;
     }
 
-    .section-hdr {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 28px 0 10px;
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      flex-shrink: 0;
+      transition: background 0.4s;
     }
+    .status-dot.connected { background: #4caf50; }
 
-    .form-card {
+    /* Panel */
+    .panel {
       background: var(--card-bg);
       border-radius: 14px;
-      padding: 20px 18px 18px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      padding: 20px 18px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      margin-bottom: 16px;
     }
 
-    .field { margin-bottom: 14px; }
-    .field:last-child { margin-bottom: 0; }
-
-    label.field-label {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 7px;
-    }
-
-    input[type="text"], textarea {
-      width: 100%;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 1rem;
-      font-family: 'Lato', sans-serif;
-      color: var(--ink);
-      background: #fff;
-      -webkit-appearance: none;
-      transition: border-color 0.15s;
-    }
-
-    input[type="text"]:focus, textarea:focus {
-      outline: none;
-      border-color: var(--ink);
-    }
-
-    textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
-
-    /* Specials list */
-    #specials-list { display: flex; flex-direction: column; gap: 14px; }
-
-    .special-item {
-      border: 1.5px solid #e8e8e8;
-      border-radius: 10px;
-      padding: 14px 12px 12px;
-      background: #fafaf9;
-    }
-
-    .item-header {
+    .panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
     }
 
-    .item-num {
+    .section-label {
       font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.14em;
@@ -108,24 +78,130 @@
       color: var(--muted);
     }
 
-    .btn-remove {
+    /* Inputs */
+    input[type="text"], textarea {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-size: 0.95rem;
+      font-family: 'Lato', sans-serif;
+      color: var(--ink);
+      background: #fff;
+      -webkit-appearance: none;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--ink); }
+    textarea { resize: vertical; min-height: 60px; line-height: 1.45; }
+
+    /* Active list */
+    #active-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .active-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #fafaf9;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 9px;
+    }
+
+    .active-num {
+      font-size: 0.63rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #bbb;
+      flex-shrink: 0;
+      width: 16px;
+      text-align: center;
+    }
+
+    .active-info { flex: 1; min-width: 0; }
+
+    .active-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .active-desc {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+
+    .active-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.8rem;
+      margin-top: 1px;
+    }
+
+    .btn-x {
       background: none;
       border: none;
-      color: #bbb;
-      font-size: 1.1rem;
-      width: 28px;
-      height: 28px;
+      color: #ccc;
+      font-size: 1rem;
+      width: 28px; height: 28px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       border-radius: 50%;
+      transition: background 0.13s, color 0.13s;
       -webkit-tap-highlight-color: transparent;
-      transition: background 0.15s, color 0.15s;
     }
-    .btn-remove:hover { background: #fee; color: #c55; }
+    .btn-x:hover { background: #fee; color: #c55; }
 
-    .item-fields { display: flex; flex-direction: column; gap: 8px; }
+    .active-empty {
+      text-align: center;
+      padding: 20px;
+      color: #bbb;
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    /* Custom one-off form */
+    .custom-form {
+      margin-top: 12px;
+      padding: 14px;
+      background: #f4f3f0;
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .custom-form.hidden { display: none; }
+    .custom-form input { font-size: 0.9rem; padding: 9px 12px; }
+
+    /* Back panel */
+    .back-field { margin-bottom: 12px; }
+    .back-field:last-child { margin-bottom: 0; }
+
+    .field-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field-note {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #bbb;
+      font-size: 0.67rem;
+    }
+
+    .back-field textarea { min-height: 62px; font-size: 0.9rem; }
 
     /* File upload */
     .file-upload-label {
@@ -133,54 +209,87 @@
       background: #f0efe9;
       border: 2px solid #e0e0e0;
       border-radius: 8px;
-      padding: 13px 16px;
-      font-size: 0.9rem;
+      padding: 12px 16px;
+      font-size: 0.88rem;
       color: #888;
       cursor: pointer;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
       transition: border-color 0.15s, background 0.15s;
     }
-    .file-upload-label:hover, .file-upload-label:active {
-      border-color: #bbb;
-      background: #e8e7e1;
-    }
+    .file-upload-label:hover { border-color: #bbb; background: #e8e7e1; }
     .file-upload-label input[type="file"] { display: none; }
     .file-name { font-weight: 700; color: var(--ink); }
 
     /* Buttons */
-    .btn-add {
+    .btn-dashed {
       width: 100%;
-      margin-top: 14px;
-      padding: 13px;
+      margin-top: 12px;
+      padding: 11px;
       background: none;
       border: 2px dashed #d0d0d0;
-      border-radius: 10px;
+      border-radius: 9px;
       font-family: 'Lato', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #aaa;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
       transition: border-color 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .btn-add:hover { border-color: #aaa; color: #555; }
+    .btn-dashed:hover { border-color: #aaa; color: #555; }
 
     .btn-row {
       display: flex;
       gap: 10px;
-      margin: 24px 0 0;
+      margin-bottom: 10px;
+    }
+
+    .btn-sm-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn-primary {
+      padding: 9px 15px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-ghost {
+      padding: 9px 15px;
+      background: transparent;
+      color: #888;
+      border: 1.5px solid #ddd;
+      border-radius: 7px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .btn-clear, .btn-print, .btn-pdf {
       flex: 1;
-      padding: 16px 10px;
+      padding: 15px 12px;
       font-family: 'Lato', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 700;
-      letter-spacing: 0.09em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       border: none;
       border-radius: 8px;
@@ -194,34 +303,126 @@
     button:active { transform: scale(0.97); opacity: 0.85; }
 
     .print-tip {
-      margin-top: 10px;
+      margin-bottom: 16px;
       font-size: 0.72rem;
-      color: #bbb;
+      color: #aaa;
       text-align: center;
-      line-height: 1.5;
+      line-height: 1.4;
     }
-    .print-tip strong { color: #999; }
+    .print-tip strong { color: #888; }
+
+    /* Library */
+    .item-form {
+      background: #f2f1ee;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .item-form.hidden { display: none; }
+
+    #library-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .lib-card {
+      background: #fafaf9;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 12px 10px 10px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .lib-card:hover { border-color: #999; background: #f0efe9; }
+    .lib-card.at-max { opacity: 0.4; cursor: default; pointer-events: none; }
+
+    .lib-card-actions {
+      position: absolute;
+      top: 7px; right: 7px;
+      display: flex;
+      gap: 3px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      color: #999;
+      font-size: 0.85rem;
+      width: 24px; height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: color 0.12s, background 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-icon:hover { color: #555; background: rgba(0,0,0,0.07); }
+    .btn-icon.del:hover { color: #c55; background: #fee; }
+
+    .lib-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--ink);
+      padding-right: 40px;
+      line-height: 1.25;
+      margin-bottom: 5px;
+    }
+
+    .lib-desc {
+      font-size: 0.74rem;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.35;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .lib-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      color: var(--ink);
+    }
+
+    .lib-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 30px 16px;
+      color: #bbb;
+      font-size: 0.82rem;
+      font-style: italic;
+    }
 
     /* Previews */
     .preview-wrap {
       background: var(--card-bg);
       border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-      margin-top: 24px;
+      padding: 20px 18px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      margin-bottom: 16px;
     }
 
     .preview-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: #bbb;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
-    /* 4-up grid */
     .specials-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -237,10 +438,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 10px 12px;
       text-align: center;
       border: 1px dashed #d0d0d0;
+    }
+
+    .card-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
 
     .card-special { width: 100%; }
@@ -254,7 +463,7 @@
 
     .card-description {
       font-family: 'Lato', sans-serif;
-      font-weight: 300;
+      font-weight: 400;
       font-style: italic;
       color: #555;
       line-height: 1.45;
@@ -274,44 +483,8 @@
       width: 55%;
       margin: 0 auto;
     }
-    .item-sep::before, .item-sep::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #ddd;
-    }
-    .item-sep span { color: #ccc; padding: 0 5px; line-height: 1; }
-
-    /* Front font scaling by item count */
-    .specials-grid[data-count="1"] .card-title       { font-size: clamp(12px, 2.8vw, 22px); }
-    .specials-grid[data-count="1"] .card-description { font-size: clamp(8px, 1.5vw, 12px); }
-    .specials-grid[data-count="1"] .card-price       { font-size: clamp(11px, 2.2vw, 17px); }
-    .specials-grid[data-count="1"] .item-sep         { margin: 8px auto; }
-    .specials-grid[data-count="1"] .item-sep span    { font-size: 10px; }
-
-    .specials-grid[data-count="2"] .card-title       { font-size: clamp(11px, 2.3vw, 18px); }
-    .specials-grid[data-count="2"] .card-description { font-size: clamp(7px, 1.3vw, 10px); }
-    .specials-grid[data-count="2"] .card-price       { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="2"] .item-sep         { margin: 7px auto; }
-    .specials-grid[data-count="2"] .item-sep span    { font-size: 9px; }
-
-    .specials-grid[data-count="3"] .card-title       { font-size: clamp(10px, 1.9vw, 15px); }
-    .specials-grid[data-count="3"] .card-description { font-size: clamp(6.5px, 1.1vw, 9px); }
-    .specials-grid[data-count="3"] .card-price       { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="3"] .item-sep         { margin: 5px auto; }
-    .specials-grid[data-count="3"] .item-sep span    { font-size: 8px; }
-
-    .specials-grid[data-count="4"] .card-title       { font-size: clamp(9px, 1.6vw, 13px); }
-    .specials-grid[data-count="4"] .card-description { font-size: clamp(6px, 1vw, 8px); }
-    .specials-grid[data-count="4"] .card-price       { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="4"] .item-sep         { margin: 4px auto; }
-    .specials-grid[data-count="4"] .item-sep span    { font-size: 7px; }
-
-    .specials-grid[data-count="5"] .card-title       { font-size: clamp(8px, 1.4vw, 11px); }
-    .specials-grid[data-count="5"] .card-description { font-size: clamp(5.5px, 0.9vw, 7.5px); }
-    .specials-grid[data-count="5"] .card-price       { font-size: clamp(7px, 1.2vw, 10px); }
-    .specials-grid[data-count="5"] .item-sep         { margin: 3px auto; }
-    .specials-grid[data-count="5"] .item-sep span    { font-size: 6.5px; }
+    .item-sep::before, .item-sep::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+    .item-sep span { color: #ccc; padding: 0 6px; line-height: 1; }
 
     /* ── BACK CARD ── */
     .back-card {
@@ -329,7 +502,6 @@
       font-size: clamp(9px, 1.8vw, 14px);
       font-weight: 700;
       color: var(--ink);
-      letter-spacing: 0.04em;
       line-height: 1.2;
     }
 
@@ -379,246 +551,369 @@
       margin: 6px auto;
     }
 
+    /* Screen font scaling */
+    .specials-grid[data-count="1"] .card-title        { font-size: clamp(12px, 2.8vw, 22px); }
+    .specials-grid[data-count="1"] .card-description  { font-size: clamp(10px, 1.7vw, 14px); }
+    .specials-grid[data-count="1"] .card-price        { font-size: clamp(11px, 2.2vw, 17px); }
+    .specials-grid[data-count="1"] .item-sep          { margin: 8px auto; }
+    .specials-grid[data-count="1"] .item-sep span     { font-size: 10px; }
+
+    .specials-grid[data-count="2"] .card-title        { font-size: clamp(11px, 2.3vw, 18px); }
+    .specials-grid[data-count="2"] .card-description  { font-size: clamp(9px, 1.5vw, 12px); }
+    .specials-grid[data-count="2"] .card-price        { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="2"] .item-sep          { margin: 7px auto; }
+    .specials-grid[data-count="2"] .item-sep span     { font-size: 9px; }
+
+    .specials-grid[data-count="3"] .card-title        { font-size: clamp(10px, 1.9vw, 15px); }
+    .specials-grid[data-count="3"] .card-description  { font-size: clamp(8.5px, 1.3vw, 11px); }
+    .specials-grid[data-count="3"] .card-price        { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="3"] .item-sep          { margin: 5px auto; }
+    .specials-grid[data-count="3"] .item-sep span     { font-size: 8px; }
+
+    .specials-grid[data-count="4"] .card-title        { font-size: clamp(9px, 1.6vw, 13px); }
+    .specials-grid[data-count="4"] .card-description  { font-size: clamp(8px, 1.2vw, 10px); }
+    .specials-grid[data-count="4"] .card-price        { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="4"] .item-sep          { margin: 4px auto; }
+    .specials-grid[data-count="4"] .item-sep span     { font-size: 7px; }
+
+    .specials-grid[data-count="5"] .card-title        { font-size: clamp(8px, 1.4vw, 11px); }
+    .specials-grid[data-count="5"] .card-description  { font-size: clamp(7.5px, 1.1vw, 9.5px); }
+    .specials-grid[data-count="5"] .card-price        { font-size: clamp(7px, 1.2vw, 10px); }
+    .specials-grid[data-count="5"] .item-sep          { margin: 3px auto; }
+    .specials-grid[data-count="5"] .item-sep span     { font-size: 6.5px; }
+
     /* ── PRINT ── */
     @media print {
       @page { size: letter portrait; margin: 0; }
 
       html, body {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
+        margin: 0 !important; padding: 0 !important;
+        width: 8.5in !important;
         background: white !important;
+        -webkit-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
       }
 
-      .app-title, .section-hdr, .form-card,
-      .btn-add, .btn-row, .print-tip, .preview-label { display: none !important; }
+      .card-description { line-height: 1.45 !important; }
 
-      .app {
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
+      .app-header, .panel, .btn-row, .print-tip, .preview-label { display: none !important; }
+      .app { max-width: none !important; margin: 0 !important; padding: 0 !important; }
 
       .preview-wrap {
-        box-shadow: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        background: white !important;
+        box-shadow: none !important; padding: 0 !important;
+        margin: 0 !important; border-radius: 0 !important; background: white !important;
       }
 
       #front-grid, #back-grid {
-        width: 100vw !important;
-        height: 100vh !important;
-        aspect-ratio: unset !important;
-        border: none !important;
-        border-radius: 0 !important;
-        overflow: visible !important;
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 50% 50%;
+        width: 8.5in; height: 11in;
+        border: none; border-radius: 0;
+        overflow: visible; aspect-ratio: unset;
+        margin: 0; padding: 0;
       }
 
-      #back-grid {
-        page-break-before: always;
-        break-before: page;
-      }
+      #back-grid { page-break-before: always; break-before: page; }
 
-      /* Cut guides — front */
-      .special-card { border: none !important; }
-      .special-card:nth-child(1),
-      .special-card:nth-child(2) { border-bottom: 1px dashed #bbb !important; }
-      .special-card:nth-child(1),
-      .special-card:nth-child(3) { border-right: 1px dashed #bbb !important; }
+      /* Front cut guides */
+      .special-card { display: flex; flex-direction: column; align-items: center; text-align: center; border: none; }
+      .special-card:nth-child(1), .special-card:nth-child(2) { border-bottom: 1px dashed #bbb; }
+      .special-card:nth-child(1), .special-card:nth-child(3) { border-right: 1px dashed #bbb; }
+      .item-sep::before, .item-sep::after { background: #777; }
+      .item-sep span { color: #777; }
 
-      /* Cut guides — back */
-      .back-card { border: none !important; }
-      .back-card:nth-child(1),
-      .back-card:nth-child(2) { border-bottom: 1px dashed #bbb !important; }
-      .back-card:nth-child(1),
-      .back-card:nth-child(3) { border-right: 1px dashed #bbb !important; }
+      /* Back cut guides */
+      .back-card { border: none; }
+      .back-card:nth-child(1), .back-card:nth-child(2) { border-bottom: 1px dashed #bbb; }
+      .back-card:nth-child(1), .back-card:nth-child(3) { border-right: 1px dashed #bbb; }
 
-      /* Back card print sizes */
-      .back-card       { padding: 0.35in 0.38in !important; }
-      .back-card-hdr   { font-size: 13pt; }
-      .back-card-rule  { width: 2in; margin: 6pt auto 9pt; }
-      .back-card-img   { max-width: 1.5in; margin-bottom: 9pt; }
+      /* Back print sizes */
+      .back-card         { padding: 0.35in 0.38in; }
+      .back-card-hdr     { font-size: 13pt; }
+      .back-card-rule    { width: 2in; margin: 6pt auto 9pt; }
+      .back-card-img     { max-width: 1.5in; margin-bottom: 9pt; }
       .back-card-img-placeholder { width: 1.5in; margin-bottom: 9pt; font-size: 7pt; }
       .back-card-comment { font-size: 8pt; line-height: 1.55; }
-      .back-card-sep   { margin: 7pt auto; }
+      .back-card-sep     { margin: 7pt auto; }
 
-      /* Front print sizes per item count */
-      .specials-grid[data-count="1"] .special-card     { padding: 0.45in 0.42in !important; }
-      .specials-grid[data-count="1"] .card-title       { font-size: 22pt; }
-      .specials-grid[data-count="1"] .card-description { font-size: 10.5pt; margin-top: 5pt; }
-      .specials-grid[data-count="1"] .card-price       { font-size: 16pt; margin-top: 8pt; }
-      .specials-grid[data-count="1"] .item-sep         { margin: 12pt auto; width: 1.8in; }
-      .specials-grid[data-count="1"] .item-sep span    { font-size: 8pt; }
+      /* Front print sizes */
+      .specials-grid[data-count="1"] .special-card      { padding: 0.45in 0.42in; }
+      .specials-grid[data-count="1"] .card-title        { font-size: 22pt; }
+      .specials-grid[data-count="1"] .card-description  { font-size: 12.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="1"] .card-price        { font-size: 16pt; margin-top: 8pt; }
+      .specials-grid[data-count="1"] .item-sep          { margin: 12pt auto; width: 1.8in; }
+      .specials-grid[data-count="1"] .item-sep span     { font-size: 8pt; }
 
-      .specials-grid[data-count="2"] .special-card     { padding: 0.42in 0.40in !important; }
-      .specials-grid[data-count="2"] .card-title       { font-size: 17pt; }
-      .specials-grid[data-count="2"] .card-description { font-size: 9.5pt; margin-top: 4pt; }
-      .specials-grid[data-count="2"] .card-price       { font-size: 13pt; margin-top: 6pt; }
-      .specials-grid[data-count="2"] .item-sep         { margin: 10pt auto; width: 1.6in; }
-      .specials-grid[data-count="2"] .item-sep span    { font-size: 7.5pt; }
+      .specials-grid[data-count="2"] .special-card      { padding: 0.42in 0.40in; }
+      .specials-grid[data-count="2"] .card-title        { font-size: 17pt; }
+      .specials-grid[data-count="2"] .card-description  { font-size: 11.5pt; margin-top: 4pt; }
+      .specials-grid[data-count="2"] .card-price        { font-size: 13pt; margin-top: 6pt; }
+      .specials-grid[data-count="2"] .item-sep          { margin: 10pt auto; width: 1.6in; }
+      .specials-grid[data-count="2"] .item-sep span     { font-size: 7.5pt; }
 
-      .specials-grid[data-count="3"] .special-card     { padding: 0.38in 0.38in !important; }
-      .specials-grid[data-count="3"] .card-title       { font-size: 14pt; }
-      .specials-grid[data-count="3"] .card-description { font-size: 8.5pt; margin-top: 3pt; }
-      .specials-grid[data-count="3"] .card-price       { font-size: 11.5pt; margin-top: 5pt; }
-      .specials-grid[data-count="3"] .item-sep         { margin: 7pt auto; width: 1.4in; }
-      .specials-grid[data-count="3"] .item-sep span    { font-size: 7pt; }
+      .specials-grid[data-count="3"] .special-card      { padding: 0.38in 0.38in; }
+      .specials-grid[data-count="3"] .card-title        { font-size: 14pt; }
+      .specials-grid[data-count="3"] .card-description  { font-size: 10.5pt; margin-top: 3pt; }
+      .specials-grid[data-count="3"] .card-price        { font-size: 11.5pt; margin-top: 5pt; }
+      .specials-grid[data-count="3"] .item-sep          { margin: 7pt auto; width: 1.4in; }
+      .specials-grid[data-count="3"] .item-sep span     { font-size: 7pt; }
 
-      .specials-grid[data-count="4"] .special-card     { padding: 0.3in 0.35in !important; }
-      .specials-grid[data-count="4"] .card-title       { font-size: 12pt; }
-      .specials-grid[data-count="4"] .card-description { font-size: 8pt; margin-top: 2pt; }
-      .specials-grid[data-count="4"] .card-price       { font-size: 10pt; margin-top: 4pt; }
-      .specials-grid[data-count="4"] .item-sep         { margin: 5pt auto; width: 1.2in; }
-      .specials-grid[data-count="4"] .item-sep span    { font-size: 6.5pt; }
+      .specials-grid[data-count="4"] .special-card      { padding: 0.3in 0.35in; }
+      .specials-grid[data-count="4"] .card-title        { font-size: 12pt; }
+      .specials-grid[data-count="4"] .card-description  { font-size: 10pt; margin-top: 2pt; }
+      .specials-grid[data-count="4"] .card-price        { font-size: 10pt; margin-top: 4pt; }
+      .specials-grid[data-count="4"] .item-sep          { margin: 5pt auto; width: 1.2in; }
+      .specials-grid[data-count="4"] .item-sep span     { font-size: 6.5pt; }
 
-      .specials-grid[data-count="5"] .special-card     { padding: 0.22in 0.32in !important; }
-      .specials-grid[data-count="5"] .card-title       { font-size: 10.5pt; }
-      .specials-grid[data-count="5"] .card-description { font-size: 7.5pt; margin-top: 2pt; }
-      .specials-grid[data-count="5"] .card-price       { font-size: 9pt; margin-top: 3pt; }
-      .specials-grid[data-count="5"] .item-sep         { margin: 4pt auto; width: 1in; }
-      .specials-grid[data-count="5"] .item-sep span    { font-size: 6pt; }
-
-      .item-sep::before, .item-sep::after { background: #ccc; }
-      .item-sep span { color: #bbb; }
+      .specials-grid[data-count="5"] .special-card      { padding: 0.22in 0.32in; }
+      .specials-grid[data-count="5"] .card-title        { font-size: 10.5pt; }
+      .specials-grid[data-count="5"] .card-description  { font-size: 9.5pt; margin-top: 2pt; }
+      .specials-grid[data-count="5"] .card-price        { font-size: 9pt; margin-top: 3pt; }
+      .specials-grid[data-count="5"] .item-sep          { margin: 4pt auto; width: 1in; }
+      .specials-grid[data-count="5"] .item-sep span     { font-size: 6pt; }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1 class="app-title">The Loft — Specials</h1>
 
-    <!-- FRONT FORM -->
-    <div class="section-hdr">Front — Specials</div>
-    <div class="form-card">
-      <div id="specials-list"></div>
-      <button class="btn-add" id="btn-add" onclick="addItem()">+ Add Special</button>
+    <div class="app-header">
+      <span class="status-dot" id="status-dot"></span>
+      <h1 class="app-title">Loft Specials</h1>
     </div>
 
-    <!-- BACK FORM -->
-    <div class="section-hdr">Back — Drink Board</div>
-    <div class="form-card">
-      <div class="field">
-        <label class="field-label">Header</label>
+    <!-- Tonight's Specials -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="section-label">Tonight's Specials</span>
+      </div>
+      <div id="active-list"></div>
+      <div class="custom-form hidden" id="custom-form">
+        <input type="text" id="custom-title" placeholder="Dish name" />
+        <input type="text" id="custom-desc"  placeholder="Description" />
+        <input type="text" id="custom-price" placeholder="Price — e.g. $28" />
+        <div class="btn-sm-row">
+          <button class="btn-ghost"   onclick="hideCustom()">Cancel</button>
+          <button class="btn-primary" onclick="addCustom()">Add to Tonight</button>
+        </div>
+      </div>
+      <button class="btn-dashed" id="btn-custom">+ Custom Item</button>
+    </div>
+
+    <!-- Menu Library -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="section-label">Menu Library</span>
+        <button class="btn-primary" onclick="showForm(null)">+ New Item</button>
+      </div>
+      <div class="item-form hidden" id="item-form">
+        <input type="text" id="form-title" placeholder="Dish name" />
+        <textarea       id="form-desc"  placeholder="Description"></textarea>
+        <input type="text" id="form-price" placeholder="Price — e.g. $28" />
+        <div class="btn-sm-row">
+          <button class="btn-ghost"   onclick="hideForm()">Cancel</button>
+          <button class="btn-primary" onclick="saveItem()">Save to Library</button>
+        </div>
+      </div>
+      <div id="library-grid"></div>
+    </div>
+
+    <!-- Back — Drink Board -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="section-label">Back — Drink Board</span>
+      </div>
+      <div class="back-field">
+        <div class="field-label">Header</div>
         <input type="text" id="back-header" placeholder="On Tap This Week" />
       </div>
-      <div class="field">
-        <label class="field-label">Image <span style="font-weight:300;text-transform:none;letter-spacing:0">(PNG or JPG — optional)</span></label>
+      <div class="back-field">
+        <div class="field-label">Image <span class="field-note">(PNG or JPG — re-upload each session)</span></div>
         <label class="file-upload-label">
           <span id="file-name-display">Choose Image</span>
           <input type="file" id="back-image" accept="image/*" />
         </label>
       </div>
-      <div class="field">
-        <label class="field-label">Comment 1</label>
+      <div class="back-field">
+        <div class="field-label">Comment 1</div>
         <textarea id="back-comment1" placeholder="Printed beer list &amp; cocktail menu is at the printers — scan above for our temporary full drink menu"></textarea>
       </div>
-      <div class="field">
-        <label class="field-label">Comment 2</label>
-        <textarea id="back-comment2" placeholder="News, updates, etc."></textarea>
+      <div class="back-field">
+        <div class="field-label">Comment 2</div>
+        <textarea id="back-comment2" placeholder="News, updates, upcoming events…"></textarea>
       </div>
     </div>
 
-    <!-- ACTIONS -->
+    <!-- Actions -->
     <div class="btn-row">
       <button class="btn-clear" onclick="clearAll()">Clear</button>
       <button class="btn-print" onclick="window.print()">Print</button>
-      <button class="btn-pdf" onclick="generatePDF()">Generate PDF</button>
+      <button class="btn-pdf"   onclick="generatePDF()">Generate PDF</button>
     </div>
-    <p class="print-tip">Safari print dialog → uncheck <strong>Print headers and footers</strong></p>
+    <p class="print-tip">Safari → uncheck <strong>Print headers and footers</strong> · <strong>Share → Add to Home Screen</strong> for iPad app feel</p>
 
-    <!-- FRONT PREVIEW -->
+    <!-- Front preview -->
     <div class="preview-wrap">
       <div class="preview-label">Front Preview — 4 per sheet</div>
       <div class="specials-grid" id="front-grid"></div>
     </div>
 
-    <!-- BACK PREVIEW -->
+    <!-- Back preview -->
     <div class="preview-wrap">
       <div class="preview-label">Back Preview — 4 per sheet</div>
       <div class="specials-grid" id="back-grid"></div>
     </div>
+
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>
-    const MAX = 5;
-    let items = [{ title: '', desc: '', price: '' }];
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+    import { getFirestore, collection, doc, onSnapshot, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp }
+      from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+    import { getAuth, signInAnonymously, onAuthStateChanged }
+      from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyAAe7KTCph09PsEBPgLF7tEXOOv2f0Xos8",
+      authDomain:        "loftdb-15393.firebaseapp.com",
+      projectId:         "loftdb-15393",
+      storageBucket:     "loftdb-15393.firebasestorage.app",
+      messagingSenderId: "925271690412",
+      appId:             "1:925271690412:web:e91da974380c6a24756309"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const db    = getFirestore(fbApp);
+    const auth  = getAuth(fbApp);
+
+    // iOS print fix: set viewport to exact paper width before printing
+    const metaVp = document.querySelector('meta[name="viewport"]');
+    window.addEventListener('beforeprint', () => { metaVp.content = 'width=816'; });
+    window.addEventListener('afterprint',  () => { metaVp.content = 'width=device-width, initial-scale=1.0'; });
+
+    // ── State ──
+    let library          = [];
+    let active           = [];
+    let editingId        = null;
     let backImageDataURL = null;
+    let listenersStarted = false;
 
-    function esc(s) {
-      const d = document.createElement('div');
-      d.textContent = s;
-      return d.innerHTML;
+    // ── Auth ──
+    const dot = document.getElementById('status-dot');
+    signInAnonymously(auth).catch(e => console.error('Auth:', e));
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        dot.classList.add('connected');
+        if (!listenersStarted) { listenersStarted = true; startListeners(); }
+      } else {
+        dot.classList.remove('connected');
+      }
+    });
+
+    function startListeners() {
+      // Shared library — same pool as the specials tool
+      onSnapshot(collection(db, 'specials_library'), snap => {
+        library = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        renderLibrary();
+      });
+
+      // Independent active state for loftspecials
+      onSnapshot(doc(db, 'active_loftspecials', 'current'), snap => {
+        if (snap.exists()) {
+          const data = snap.data();
+          active = data.items || [];
+          const sync = (id, val) => {
+            const el = document.getElementById(id);
+            if (document.activeElement !== el) el.value = val || '';
+          };
+          sync('back-header',   data.backHeader);
+          sync('back-comment1', data.backComment1);
+          sync('back-comment2', data.backComment2);
+        } else {
+          active = [];
+        }
+        renderActive();
+        renderFront();
+        renderBack();
+      });
     }
 
-    /* ── FRONT FORM ── */
-    function renderForm() {
-      document.getElementById('specials-list').innerHTML = items.map((item, i) => `
-        <div class="special-item">
-          <div class="item-header">
-            <span class="item-num">Special ${i + 1}</span>
-            ${items.length > 1
-              ? `<button class="btn-remove" onclick="removeItem(${i})">✕</button>`
-              : ''}
+    // ── Render: active list ──
+    function renderActive() {
+      const el        = document.getElementById('active-list');
+      const btnCustom = document.getElementById('btn-custom');
+
+      el.innerHTML = active.length === 0
+        ? '<div class="active-empty">Tap items from the library to add them</div>'
+        : active.map((item, i) => `
+            <div class="active-item">
+              <span class="active-num">${i + 1}</span>
+              <div class="active-info">
+                <div class="active-title">${esc(item.title)}</div>
+                ${item.description ? `<div class="active-desc">${esc(item.description)}</div>` : ''}
+                ${item.price       ? `<div class="active-price">${esc(item.price)}</div>` : ''}
+              </div>
+              <button class="btn-x" onclick="removeActive(${i})">✕</button>
+            </div>`).join('');
+
+      const atMax = active.length >= 5;
+      btnCustom.style.display = atMax ? 'none' : '';
+      if (atMax) hideCustom();
+      renderLibrary();
+    }
+
+    // ── Render: library grid ──
+    function renderLibrary() {
+      const grid  = document.getElementById('library-grid');
+      const atMax = active.length >= 5;
+
+      if (library.length === 0) {
+        grid.innerHTML = '<div class="lib-empty">Library is empty — tap + New Item to add your first special</div>';
+        return;
+      }
+
+      grid.innerHTML = library.map(item => `
+        <div class="lib-card${atMax ? ' at-max' : ''}" onclick="tapLib('${item.id}')">
+          <div class="lib-card-actions">
+            <button class="btn-icon"     onclick="event.stopPropagation();editItem('${item.id}')" title="Edit">✎</button>
+            <button class="btn-icon del" onclick="event.stopPropagation();deleteItem('${item.id}')" title="Remove">✕</button>
           </div>
-          <div class="item-fields">
-            <input type="text" placeholder="Dish name" value="${esc(item.title)}"
-              oninput="updateItem(${i},'title',this.value)" />
-            <textarea placeholder="Description"
-              oninput="updateItem(${i},'desc',this.value)">${esc(item.desc)}</textarea>
-            <input type="text" placeholder="Price — e.g. $28" value="${esc(item.price)}"
-              oninput="updateItem(${i},'price',this.value)" />
-          </div>
+          <div class="lib-title">${esc(item.title)}</div>
+          ${item.description ? `<div class="lib-desc">${esc(item.description)}</div>` : ''}
+          <div class="lib-price">${esc(item.price)}</div>
         </div>`).join('');
-
-      document.getElementById('btn-add').style.display =
-        items.length >= MAX ? 'none' : 'block';
-
-      renderFront();
     }
 
-    function updateItem(i, field, val) {
-      items[i][field] = val;
-      renderFront();
-    }
-
-    function addItem() {
-      if (items.length >= MAX) return;
-      items.push({ title: '', desc: '', price: '' });
-      renderForm();
-    }
-
-    function removeItem(i) {
-      items.splice(i, 1);
-      renderForm();
-    }
-
-    /* ── FRONT CARD ── */
+    // ── Render: front card ──
     function renderFront() {
+      const items = active.length > 0
+        ? active
+        : [{ title: 'Dish Name', description: 'description', price: '$—' }];
       const n = items.length;
+
       const html = items.map((item, i) => {
-        const sep = i < items.length - 1
-          ? `<div class="item-sep"><span>✦</span></div>`
-          : '';
-        return `
-          <div class="card-special">
-            <div class="card-title">${esc(item.title) || 'Dish Name'}</div>
-            <div class="card-description">${esc(item.desc) || 'description'}</div>
-            <div class="card-price">${esc(item.price) || '$—'}</div>
-          </div>${sep}`;
+        const sep = i < items.length - 1 ? `<div class="item-sep"><span>✦</span></div>` : '';
+        return `<div class="card-special">
+          <div class="card-title">${esc(item.title) || 'Dish Name'}</div>
+          ${item.description ? `<div class="card-description">${esc(item.description)}</div>` : ''}
+          ${item.price       ? `<div class="card-price">${esc(item.price)}</div>` : ''}
+        </div>${sep}`;
       }).join('');
 
-      const card = `<div class="special-card">${html}</div>`;
+      const card = `<div class="special-card"><div class="card-main">${html}</div></div>`;
       const grid = document.getElementById('front-grid');
       grid.dataset.count = n;
       grid.innerHTML = card + card + card + card;
     }
 
-    /* ── BACK CARD ── */
+    // ── Render: back card ──
     function renderBack() {
       const header   = document.getElementById('back-header').value.trim();
       const comment1 = document.getElementById('back-comment1').value.trim();
@@ -629,9 +924,7 @@
         : `<div class="back-card-img-placeholder">image</div>`;
 
       const c2Html = comment2
-        ? `<div class="back-card-sep"></div>
-           <div class="back-card-comment">${esc(comment2)}</div>`
-        : '';
+        ? `<div class="back-card-sep"></div><div class="back-card-comment">${esc(comment2)}</div>` : '';
 
       const card = `
         <div class="back-card">
@@ -645,69 +938,158 @@
       document.getElementById('back-grid').innerHTML = card + card + card + card;
     }
 
-    /* ── IMAGE UPLOAD ── */
-    document.getElementById('back-image').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      document.getElementById('file-name-display').innerHTML =
-        `<span class="file-name">${esc(file.name)}</span>`;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        backImageDataURL = ev.target.result;
-        renderBack();
-      };
-      reader.readAsDataURL(file);
-    });
+    // ── Active: mutations ──
+    async function addToActive(item) {
+      if (active.length >= 5) return;
+      active = [...active, { title: item.title || '', description: item.description || '', price: item.price || '' }];
+      await persistActive();
+    }
 
-    ['back-header', 'back-comment1', 'back-comment2'].forEach(id => {
-      document.getElementById(id).addEventListener('input', renderBack);
-    });
+    async function removeActive(i) {
+      active = active.filter((_, idx) => idx !== i);
+      await persistActive();
+    }
 
-    /* ── CLEAR ── */
-    function clearAll() {
-      items = [{ title: '', desc: '', price: '' }];
+    async function persistActive() {
+      await setDoc(doc(db, 'active_loftspecials', 'current'), {
+        items:        active,
+        backHeader:   document.getElementById('back-header').value.trim(),
+        backComment1: document.getElementById('back-comment1').value.trim(),
+        backComment2: document.getElementById('back-comment2').value.trim(),
+        updatedAt:    serverTimestamp()
+      });
+    }
+
+    async function clearAll() {
+      active = [];
       ['back-header', 'back-comment1', 'back-comment2'].forEach(id => {
         document.getElementById(id).value = '';
       });
-      backImageDataURL = null;
-      document.getElementById('file-name-display').textContent = 'Choose Image';
-      document.getElementById('back-image').value = '';
-      renderForm();
-      renderBack();
+      await persistActive();
     }
 
-    /* ── GENERATE PDF ── */
-    async function generatePDF() {
-      // Must open window synchronously — iOS blocks popups opened inside async callbacks
-      const pdfWin = window.open('', '_blank');
-      if (!pdfWin) {
-        alert('Allow popups for this page to generate PDFs.');
-        return;
+    // ── Library: tap to add tonight ──
+    function tapLib(id) {
+      if (active.length >= 5) return;
+      const item = library.find(i => i.id === id);
+      if (item) addToActive(item);
+    }
+
+    // ── Library: form ──
+    function showForm(id) {
+      editingId = id;
+      document.getElementById('item-form').classList.remove('hidden');
+      if (id) {
+        const item = library.find(i => i.id === id);
+        document.getElementById('form-title').value = item?.title || '';
+        document.getElementById('form-desc').value  = item?.description || '';
+        document.getElementById('form-price').value = item?.price || '';
+      } else {
+        ['form-title','form-desc','form-price'].forEach(i => document.getElementById(i).value = '');
       }
+      document.getElementById('form-title').focus();
+    }
+
+    function hideForm() {
+      editingId = null;
+      document.getElementById('item-form').classList.add('hidden');
+    }
+
+    async function saveItem() {
+      const title = document.getElementById('form-title').value.trim();
+      if (!title) { document.getElementById('form-title').focus(); return; }
+      const data = {
+        title,
+        description: document.getElementById('form-desc').value.trim(),
+        price:       document.getElementById('form-price').value.trim(),
+        updatedAt:   serverTimestamp()
+      };
+      if (editingId) {
+        await updateDoc(doc(db, 'specials_library', editingId), data);
+      } else {
+        await addDoc(collection(db, 'specials_library'), { ...data, createdAt: serverTimestamp() });
+      }
+      hideForm();
+    }
+
+    function editItem(id) { showForm(id); }
+
+    async function deleteItem(id) {
+      if (!confirm('Remove from library?')) return;
+      await deleteDoc(doc(db, 'specials_library', id));
+    }
+
+    // ── Custom one-off ──
+    function showCustom() {
+      document.getElementById('custom-form').classList.remove('hidden');
+      document.getElementById('btn-custom').style.display = 'none';
+      ['custom-title','custom-desc','custom-price'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('custom-title').focus();
+    }
+
+    function hideCustom() {
+      document.getElementById('custom-form').classList.add('hidden');
+      if (active.length < 5) document.getElementById('btn-custom').style.display = '';
+    }
+
+    async function addCustom() {
+      const title = document.getElementById('custom-title').value.trim();
+      if (!title) { document.getElementById('custom-title').focus(); return; }
+      await addToActive({
+        title,
+        description: document.getElementById('custom-desc').value.trim(),
+        price:       document.getElementById('custom-price').value.trim()
+      });
+      hideCustom();
+    }
+
+    // ── Image upload ──
+    document.getElementById('back-image').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('file-name-display').innerHTML = `<span class="file-name">${esc(file.name)}</span>`;
+      const reader = new FileReader();
+      reader.onload = ev => { backImageDataURL = ev.target.result; renderBack(); };
+      reader.readAsDataURL(file);
+    });
+
+    // ── Debounced sync for back text fields ──
+    const timers = {};
+    ['back-header', 'back-comment1', 'back-comment2'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        renderBack();
+        clearTimeout(timers[id]);
+        timers[id] = setTimeout(persistActive, 700);
+      });
+    });
+
+    document.getElementById('btn-custom').addEventListener('click', showCustom);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { hideForm(); hideCustom(); }
+    });
+
+    // ── Generate PDF ──
+    async function generatePDF() {
+      const pdfWin = window.open('', '_blank');
+      if (!pdfWin) { alert('Allow popups for this page to generate PDFs.'); return; }
       pdfWin.document.write(
         '<html><body style="margin:0;display:flex;align-items:center;justify-content:center;' +
         'height:100vh;font-family:sans-serif;font-size:1.1rem;color:#999;background:#f7f6f3">' +
         'Generating PDF…</body></html>'
       );
-
       try {
         await document.fonts.ready;
-
         const opts = { scale: 3, useCORS: true, backgroundColor: '#ffffff' };
-        const [frontCanvas, backCanvas] = await Promise.all([
+        const [fc, bc] = await Promise.all([
           html2canvas(document.getElementById('front-grid'), opts),
-          html2canvas(document.getElementById('back-grid'), opts)
+          html2canvas(document.getElementById('back-grid'),  opts)
         ]);
-
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'portrait', unit: 'in', format: 'letter' });
-
-        doc.addImage(frontCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 8.5, 11);
-        doc.addPage();
-        doc.addImage(backCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 8.5, 11);
-
-        pdfWin.location.href = URL.createObjectURL(doc.output('blob'));
-
+        const pdoc = new jsPDF({ orientation: 'portrait', unit: 'in', format: 'letter' });
+        pdoc.addImage(fc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 8.5, 11);
+        pdoc.addPage();
+        pdoc.addImage(bc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 8.5, 11);
+        pdfWin.location.href = URL.createObjectURL(pdoc.output('blob'));
       } catch (err) {
         console.error(err);
         pdfWin.close();
@@ -715,8 +1097,15 @@
       }
     }
 
-    /* ── INIT ── */
-    renderForm();
+    // ── Expose to HTML onclick ──
+    Object.assign(window, {
+      removeActive, clearAll, tapLib,
+      showForm, hideForm, saveItem, editItem, deleteItem,
+      showCustom, hideCustom, addCustom, generatePDF
+    });
+
+    renderActive();
+    renderFront();
     renderBack();
   </script>
 </body>
