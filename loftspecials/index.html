@@ -831,8 +831,8 @@
         renderLibrary();
       });
 
-      // Independent active state for loftspecials
-      onSnapshot(doc(db, 'active_loftspecials', 'current'), snap => {
+      // Independent active state for loftspecials (uses active_specials collection — already in Firestore rules)
+      onSnapshot(doc(db, 'active_specials', 'loftcurrent'), snap => {
         if (snap.exists()) {
           const data = snap.data();
           active = data.items || [];
@@ -949,16 +949,20 @@
     async function addToActive(item) {
       if (active.length >= 5) return;
       active = [...active, { title: item.title || '', description: item.description || '', price: item.price || '' }];
-      await persistActive();
+      renderActive();
+      renderFront();
+      try { await persistActive(); } catch(e) { console.error('persist failed:', e); }
     }
 
     async function removeActive(i) {
       active = active.filter((_, idx) => idx !== i);
-      await persistActive();
+      renderActive();
+      renderFront();
+      try { await persistActive(); } catch(e) { console.error('persist failed:', e); }
     }
 
     async function persistActive() {
-      await setDoc(doc(db, 'active_loftspecials', 'current'), {
+      await setDoc(doc(db, 'active_specials', 'loftcurrent'), {
         items:        active,
         backHeader:   document.getElementById('back-header').value.trim(),
         backComment1: document.getElementById('back-comment1').value.trim(),
@@ -972,7 +976,10 @@
       ['back-header', 'back-comment1', 'back-comment2'].forEach(id => {
         document.getElementById(id).value = '';
       });
-      await persistActive();
+      renderActive();
+      renderFront();
+      renderBack();
+      try { await persistActive(); } catch(e) { console.error('persist failed:', e); }
     }
 
     // ── Library: tap to add tonight ──
