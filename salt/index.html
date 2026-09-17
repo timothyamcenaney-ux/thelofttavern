@@ -272,7 +272,7 @@
           <h4>Hours</h4>
           <p>
             Mon – Weds: Closed<br />
-            Thursday: 11:30 AM – 10 PM<br />
+            Thursday: 3 PM – 10 PM<br />
             Friday: 11:30 AM – 10 PM<br />
             Saturday: 11:30 AM – 10 PM<br />
             Sunday: 11:30 AM – 9 PM
@@ -354,15 +354,8 @@
             body: JSON.stringify({
               structuredQuery: {
                 from: [{ collectionId: 'salt_readings' }],
-                where: {
-                  fieldFilter: {
-                    field: { fieldPath: 'timestamp' },
-                    op: 'GREATER_THAN_OR_EQUAL',
-                    value: { stringValue: oneYearAgo }
-                  }
-                },
                 orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'DESCENDING' }],
-                limit: 500
+                limit: 300
               }
             })
           }
@@ -385,7 +378,7 @@
             d.distance_cm !== null &&
             d.distance_cm < 900 &&
             d.timestamp &&
-            !d.timestamp.startsWith('1970')
+            d.timestamp >= oneYearAgo
           );
 
         if (docs.length === 0) throw new Error('No valid readings in database yet.');
