@@ -795,6 +795,13 @@
     window.addEventListener('beforeprint', () => { metaVp.content = 'width=816'; });
     window.addEventListener('afterprint',  () => { metaVp.content = 'width=device-width, initial-scale=1.0'; });
 
+    function esc(s) {
+      if (!s) return '';
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
     // ── State ──
     let library          = [];
     let active           = [];
