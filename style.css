@@ -517,6 +517,16 @@ footer {
   aspect-ratio: 11/5;
 }
 
+/* Full-width banner image, e.g. drink menu promo */
+.hero-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: var(--radius);
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
 /* Placeholder shown until you add real photos */
 .panel-img-placeholder {
   width: 100%;
