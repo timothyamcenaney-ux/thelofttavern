@@ -427,7 +427,11 @@
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ structuredQuery }) }
       );
       const results = await res.json();
-      if (!Array.isArray(results)) throw new Error((results.error && results.error.message) || 'Bad response');
+      const err = Array.isArray(results) ? (results[0] && results[0].error) : results.error;
+      if (err) {
+        if (err.code === 429) throw new Error('Daily data-read limit reached. It resets overnight (about 3 AM Eastern).');
+        throw new Error(err.message || 'Bad response');
+      }
       return results
         .filter(r => r.document && r.document.fields)
         .map(r => {
@@ -472,8 +476,33 @@
       }
     }
 
+    // Older readings come from a small static hourly file (history.json), so only recent readings hit Firestore.
+    let history = null;
+    const chartCache = {};
+
+    async function getHistory() {
+      if (history) return history;
+      try {
+        const j = await (await fetch('history.json')).json();
+        history = { through: j.through, docs: j.pts.map(p => ({
+          timestamp: new Date(p[0] * 1000).toISOString().replace(/\.\d+Z$/, 'Z'), distance_cm: p[1] })) };
+      } catch (e) { history = { through: null, docs: [] }; }
+      return history;
+    }
+
     async function loadChart() {
-      chartDocs = (await queryReadings(sinceFor(range), 50000)).reverse();   // oldest -> newest
+      const hit = chartCache[range];
+      if (hit && Date.now() - hit.at < 5 * 60e3) { chartDocs = hit.docs; return drawChart(); }
+      const since = sinceFor(range);
+      const h = await getHistory();
+      let old = [], fsSince = since;
+      if (h.through && (!since || since < h.through)) {
+        old = h.docs.filter(d => !since || d.timestamp >= since);
+        fsSince = h.through;
+      }
+      const recent = (await queryReadings(fsSince, 5000)).reverse().filter(d => !h.through || d.timestamp > h.through || !old.length);
+      chartDocs = old.concat(recent);                                  // oldest -> newest
+      chartCache[range] = { at: Date.now(), docs: chartDocs };
       drawChart();
     }
 
@@ -594,6 +623,7 @@
       if (!b || b.dataset.range === range) return;
       range = b.dataset.range;
       document.querySelectorAll('.range-btn').forEach(x => x.classList.toggle('active', x === b));
+      document.getElementById('error-msg').style.display = 'none';
       try { await loadChart(); } catch (err) {
         const el = document.getElementById('error-msg');
         el.textContent = 'Could not load data: ' + err.message; el.style.display = '';
