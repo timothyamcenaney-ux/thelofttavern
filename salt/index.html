@@ -115,6 +115,51 @@
       margin-bottom: 1rem;
     }
 
+    .salt-chart-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .salt-chart-head .salt-chart-label { margin-bottom: 0; }
+
+    .salt-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .range-btns { display: flex; gap: 0.35rem; }
+
+    .range-btn {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.3rem 0.7rem;
+      color: var(--slate);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .range-btn:hover { border-color: var(--barn); color: var(--barn); }
+    .range-btn.active { background: var(--barn); border-color: var(--barn); color: var(--snow); }
+
+    .smooth-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--slate);
+      cursor: pointer;
+      user-select: none;
+    }
+
     .salt-chart-wrap {
       position: relative;
       height: 230px;
@@ -245,15 +290,30 @@
         </div>
 
         <div class="salt-chart-card">
-          <div class="salt-chart-label">History — distance from sensor over time</div>
+          <div class="salt-chart-head">
+            <div class="salt-chart-label">History — salt level over time</div>
+            <div class="salt-controls">
+              <div class="range-btns" id="range-btns">
+                <button class="range-btn" data-range="24h">24h</button>
+                <button class="range-btn active" data-range="7d">7d</button>
+                <button class="range-btn" data-range="30d">30d</button>
+                <button class="range-btn" data-range="all">All</button>
+              </div>
+              <label class="smooth-toggle"><input type="checkbox" id="smooth-chk" checked /> Smooth</label>
+            </div>
+          </div>
           <div class="salt-chart-wrap">
             <canvas id="saltChart"></canvas>
+          </div>
+          <div class="salt-sub" id="empty-note" style="display:none">No readings in this range.
           </div>
         </div>
 
         <p class="salt-note">
-          Sensor mounted through lid, pointing down at salt surface. Distance increases as salt depletes.
-          Level % is calculated from a 30-inch barrel depth. Alert threshold: 15%.
+          Sensor mounted through lid, pointing down at the salt surface. The chart shows salt level, so it slopes down
+          as the salt is used. Level % is worked out from the distance reading: 0% is salt about 27.5 in below the rim
+          (just above the box in the bottom of the tank), 100% is the 6-bag fill line. Alert threshold: 15%.
+          "Smooth" averages out noisy readings; untick it to see the raw data.
         </p>
 
       </div>
@@ -335,6 +395,62 @@
       return date + ' ' + time;
     }
 
+    // Calibration used to turn distance into %. Newer firmware sends its own values with each reading.
+    const DEFAULT_EMPTY_CM = 70.0;   // 0%   = salt 27.5 in below the rim
+    const DEFAULT_FULL_CM  = 17.5;   // 100% = the 6-bag fill line
+
+    const RANGE_MS = { '24h': 24 * 3600e3, '7d': 7 * 24 * 3600e3, '30d': 30 * 24 * 3600e3, 'all': null };
+    let range = '7d';
+    let chartDocs = [];
+
+    function levelPct(d) {
+      const e = d.cal_empty_cm || DEFAULT_EMPTY_CM;
+      const f = d.cal_full_cm  || DEFAULT_FULL_CM;
+      return Math.max(0, Math.min(100, (e - d.distance_cm) / (e - f) * 100));
+    }
+
+    async function queryReadings(sinceIso, limit) {
+      const structuredQuery = {
+        from: [{ collectionId: 'salt_readings' }],
+        orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'DESCENDING' }],
+        select: { fields: ['timestamp', 'distance_cm', 'level_pct', 'state', 'rssi', 'cal_empty_cm', 'cal_full_cm', 'event']
+          .map(fieldPath => ({ fieldPath })) },
+        limit
+      };
+      if (sinceIso) {
+        structuredQuery.where = { fieldFilter: {
+          field: { fieldPath: 'timestamp' }, op: 'GREATER_THAN_OR_EQUAL', value: { stringValue: sinceIso }
+        } };
+      }
+      const res = await fetch(
+        `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents:runQuery?key=${API_KEY}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ structuredQuery }) }
+      );
+      const results = await res.json();
+      if (!Array.isArray(results)) throw new Error((results.error && results.error.message) || 'Bad response');
+      return results
+        .filter(r => r.document && r.document.fields)
+        .map(r => {
+          const f = r.document.fields;
+          return {
+            timestamp:    parseField(f.timestamp),
+            distance_cm:  parseField(f.distance_cm),
+            level_pct:    parseField(f.level_pct),
+            state:        parseField(f.state) || 'ok',
+            rssi:         parseField(f.rssi),
+            cal_empty_cm: parseField(f.cal_empty_cm),
+            cal_full_cm:  parseField(f.cal_full_cm),
+            event:        parseField(f.event),
+          };
+        })
+        .filter(d => d.distance_cm !== null && d.distance_cm < 900 && d.timestamp);
+    }
+
+    function sinceFor(r) {
+      if (!RANGE_MS[r]) return null;
+      return new Date(Date.now() - RANGE_MS[r]).toISOString().replace(/\.\d+Z$/, 'Z');
+    }
+
     async function loadData() {
       document.getElementById('status-msg').style.display = '';
       document.getElementById('status-msg').textContent = 'Loading sensor data...';
@@ -342,45 +458,12 @@
       document.getElementById('salt-content').style.display = 'none';
 
       try {
-        const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString();
-        const res = await fetch(
-          `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents:runQuery?key=${API_KEY}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              structuredQuery: {
-                from: [{ collectionId: 'salt_readings' }],
-                orderBy: [{ field: { fieldPath: 'timestamp' }, direction: 'DESCENDING' }],
-                limit: 300
-              }
-            })
-          }
-        );
-
-        const results = await res.json();
-        const docs = results
-          .filter(r => r.document && r.document.fields)
-          .map(r => {
-            const f = r.document.fields;
-            return {
-              timestamp:   parseField(f.timestamp),
-              distance_cm: parseField(f.distance_cm),
-              level_pct:   parseField(f.level_pct),
-              state:       parseField(f.state) || 'ok',
-              rssi:        parseField(f.rssi),
-            };
-          })
-          .filter(d =>
-            d.distance_cm !== null &&
-            d.distance_cm < 900 &&
-            d.timestamp &&
-            d.timestamp >= oneYearAgo
-          );
-
-        if (docs.length === 0) throw new Error('No valid readings in database yet.');
-        render(docs);
-
+        const latestList = await queryReadings(null, 1);
+        if (latestList.length === 0) throw new Error('No valid readings in database yet.');
+        renderCards(latestList[0]);
+        await loadChart();
+        document.getElementById('status-msg').style.display = 'none';
+        document.getElementById('salt-content').style.display = '';
       } catch (e) {
         document.getElementById('status-msg').style.display = 'none';
         const el = document.getElementById('error-msg');
@@ -389,15 +472,17 @@
       }
     }
 
-    function render(docs) {
-      const latest = docs[0];
-      const distIn = (latest.distance_cm / 2.54).toFixed(1);
+    async function loadChart() {
+      chartDocs = (await queryReadings(sinceFor(range), 50000)).reverse();   // oldest -> newest
+      drawChart();
+    }
 
+    function renderCards(latest) {
+      const distIn = (latest.distance_cm / 2.54).toFixed(1);
       document.getElementById('dist-in').textContent = distIn;
       document.getElementById('dist-cm').textContent = latest.distance_cm.toFixed(1) + ' cm';
 
-      const lvl = latest.level_pct !== null ? `Est. level: ${Math.round(latest.level_pct)}%*<br />` : '';
-      document.getElementById('level-line').innerHTML = lvl;
+      document.getElementById('level-line').innerHTML = `Est. level: ${Math.round(levelPct(latest))}%*<br />`;
       document.getElementById('rssi-val').textContent = latest.rssi !== null ? latest.rssi + ' dBm' : '—';
       document.getElementById('updated-at').textContent = timeAgo(latest.timestamp);
 
@@ -405,27 +490,53 @@
       const s = (latest.state || 'ok').toLowerCase();
       badge.className = 'badge ' + (s === 'low' ? 'badge-low' : s === 'critical' ? 'badge-critical' : 'badge-ok');
       badge.textContent = s === 'low' ? 'Low' : s === 'critical' ? 'Critical' : 'Normal';
+    }
 
-      // Chart oldest→newest, cap at barrel depth to exclude bad readings
-      const cd = [...docs].reverse();
-      const labels = cd.map(d => fmtLabel(d.timestamp));
-      const data   = cd.map(d => parseFloat((d.distance_cm / 2.54).toFixed(2)));
-      const validData = data.filter(v => v <= 35);
-      const yMin = Math.max(0, Math.floor(Math.min(...validData)) - 1);
-      const yMax = Math.min(35, Math.ceil(Math.max(...validData)) + 1);
+    // Rolling median over an odd window, sized to how many points are on screen.
+    function smoothSeries(vals) {
+      const w = Math.max(3, Math.min(25, Math.round(vals.length / 50) | 1));
+      const h = Math.floor(w / 2);
+      return vals.map((_, i) => {
+        const win = vals.slice(Math.max(0, i - h), Math.min(vals.length, i + h + 1)).sort((a, b) => a - b);
+        return win[Math.floor(win.length / 2)];
+      });
+    }
+
+    function fmtTick(ms) {
+      const d = new Date(ms);
+      if (range === '24h') return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Long ranges have tens of thousands of readings; keep one median point per time bucket (~800 on screen).
+    function downsample(docs, maxPts) {
+      if (docs.length <= maxPts) return docs;
+      const per = Math.ceil(docs.length / maxPts), out = [];
+      for (let i = 0; i < docs.length; i += per) {
+        const g = docs.slice(i, i + per).sort((a, b) => a.distance_cm - b.distance_cm);
+        out.push(g[Math.floor(g.length / 2)]);
+      }
+      return out.sort((a, b) => a.timestamp < b.timestamp ? -1 : 1);
+    }
+
+    function drawChart() {
+      const docs = downsample(chartDocs, 800);
+      document.getElementById('empty-note').style.display = docs.length ? 'none' : '';
+      let vals = docs.map(levelPct);
+      if (document.getElementById('smooth-chk').checked) vals = smoothSeries(vals);
+      const points = docs.map((d, i) => ({ x: new Date(d.timestamp).getTime(), y: parseFloat(vals[i].toFixed(1)) }));
 
       if (chart) chart.destroy();
       chart = new Chart(document.getElementById('saltChart'), {
         type: 'line',
         data: {
-          labels,
           datasets: [{
-            label: 'Inches from sensor',
-            data,
+            label: 'Salt level',
+            data: points,
             borderColor: '#D4891A',
             backgroundColor: 'rgba(212,137,26,0.07)',
             borderWidth: 2,
-            pointRadius: data.length > 40 ? 0 : 2,
+            pointRadius: points.length > 40 ? 0 : 2,
             pointHoverRadius: 4,
             fill: true,
             tension: 0.3,
@@ -434,47 +545,61 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          parsing: false,
+          interaction: { mode: 'nearest', axis: 'x', intersect: false },
           plugins: {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ctx.parsed.y.toFixed(1) + '" from sensor'
+                title: items => fmtLabel(new Date(items[0].parsed.x).toISOString()),
+                label: ctx => ctx.parsed.y.toFixed(0) + '% salt'
               }
             }
           },
           scales: {
             x: {
+              type: 'linear',
               ticks: {
                 maxTicksLimit: 6,
                 maxRotation: 0,
                 font: { family: 'Inter', size: 11 },
                 color: '#8A8680',
+                callback: v => fmtTick(v)
               },
               grid: { color: '#E0DAD0' }
             },
             y: {
-              min: yMin,
-              max: yMax,
+              min: 0,
+              max: 100,
               title: {
                 display: true,
-                text: 'Inches from sensor  (higher = lower salt)',
+                text: 'Salt level  (higher = more salt)',
                 font: { family: 'Inter', size: 11 },
                 color: '#8A8680',
               },
               ticks: {
                 font: { family: 'Inter', size: 11 },
                 color: '#8A8680',
-                callback: v => v + '"'
+                callback: v => v + '%'
               },
               grid: { color: '#E0DAD0' }
             }
           }
         }
       });
-
-      document.getElementById('status-msg').style.display = 'none';
-      document.getElementById('salt-content').style.display = '';
     }
+
+    document.getElementById('range-btns').addEventListener('click', async e => {
+      const b = e.target.closest('.range-btn');
+      if (!b || b.dataset.range === range) return;
+      range = b.dataset.range;
+      document.querySelectorAll('.range-btn').forEach(x => x.classList.toggle('active', x === b));
+      try { await loadChart(); } catch (err) {
+        const el = document.getElementById('error-msg');
+        el.textContent = 'Could not load data: ' + err.message; el.style.display = '';
+      }
+    });
+    document.getElementById('smooth-chk').addEventListener('change', drawChart);
 
     loadData();
   </script>
