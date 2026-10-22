@@ -36,7 +36,7 @@ Cloudflare Pages detects the push and deploys automatically. Live in ~60 seconds
 | `hours-status.js` | Dynamic open/closed status bar — loaded on every page |
 | `_redirects` | Cloudflare redirect rules (`/food` → `food_menu.html`, etc.) |
 | `head_foot_truth.html` | Reference template for nav + footer (not a live page) |
-| `specials/index.html` | **Specials generator tool** — Firebase-powered, staff-facing |
+| `loftspecials/index.html` | **Specials generator tool** — Firebase-powered, staff-facing |
 | `salt/index.html` | Water softener salt level monitor — IoT sensor dashboard |
 | `images/` | Site images including `oktoberfest-2026.png` (OG image for hours page) |
 
@@ -83,8 +83,8 @@ Remove after reopening. The `closureCountdown()` function shows a live "Opens in
 - **Project:** `loftdb-15393`
 - **Console:** https://console.firebase.google.com → project loftdb-15393
 - **Services used:** Firestore + Anonymous Authentication
-- **Config is embedded** in `specials/index.html` (the API key is intentionally public)
-- **Firestore collections:** `specials_library` (menu items), `active_specials/current` (tonight's list)
+- **Config is embedded** in `loftspecials/index.html` (the API key is intentionally public)
+- **Firestore collections:** `specials_library` (menu items), `active_specials/loftcurrent` (tonight's list)
 - **Security rules:** deny-all default, allow authenticated reads/writes on those two collections
 - **Free Spark tier** — no billing. Anonymous auth is enabled.
 
@@ -102,10 +102,11 @@ Remove after reopening. The `closureCountdown()` function shows a live "Opens in
 
 ---
 
-## The Specials Tool (`/specials/`)
-Staff-facing print tool for nightly specials cards. Not linked from the main nav.
+## The Specials Tool (`/loftspecials/`)
+Staff-facing print tool for nightly specials cards. Not linked from the main nav. Marked `noindex` so it stays out of search results (same for `/salt/`).
+The original `/specials/` version was retired and deleted in Oct 2026; it's still in git history (`git log -- specials`).
 
-- URL: `thelofttavern.com/specials/`
+- URL: `thelofttavern.com/loftspecials/`
 - Firebase-powered real-time sync — multiple devices see the same data instantly
 - Anonymous auth (no login) — shared across devices via localStorage token
 - Prints 4-up quarter-page cards on letter paper, designed for AirPrint from iPad
