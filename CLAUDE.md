@@ -90,7 +90,8 @@ Remove after reopening. The `closureCountdown()` function shows a live "Opens in
 
 ### iMenuPro
 - Food menu embed: `<script id="1c2e-2j" src="https://imenupro.com/!1c2e-2j">` in `food_menu.html`
-- Drink menu embed: `<script id="1c2e-1m" src="https://imenupro.com/!1c2e-1m">` in `drink_menu.html`
+- Drink menu embed: `<script id="1c2e-2m" src="https://imenupro.com/!1c2e-2m">` in `drink_menu.html`
+- Each new menu gets a new snippet ID (Marie sends it to Tim). Only the latest one is live — swap the ID in the page and ignore the old ones.
 - Tim manages menus inside iMenuPro; the site just embeds them.
 
 ### Square
