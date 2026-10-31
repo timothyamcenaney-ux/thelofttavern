@@ -192,7 +192,7 @@ nav {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 800px) {
   .nav-toggle {
     display: flex;
   }
@@ -740,4 +740,24 @@ footer {
   width: 100%;
   height: 320px;
   border: 0;
+}
+/* About page photo + caption */
+.about-figure {
+  max-width: 420px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.about-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.about-figure figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--slate);
 }

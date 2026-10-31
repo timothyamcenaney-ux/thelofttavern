@@ -32,6 +32,7 @@ Cloudflare Pages detects the push and deploys automatically. Live in ~60 seconds
 | `hours.html` | Hours page — hours grid, info cards, map, OG image |
 | `food_menu.html` | Food menu — iMenuPro script embed |
 | `drink_menu.html` | Drink menu — iMenuPro script embed |
+| `about.html` | About Us page — crew photo + caption (`images/wendy-and-wanda.jpg`) |
 | `style.css` | Shared stylesheet for all pages |
 | `hours-status.js` | Dynamic open/closed status bar — loaded on every page |
 | `_redirects` | Cloudflare redirect rules (`/food` → `food_menu.html`, etc.) |
@@ -123,7 +124,9 @@ The original `/specials/` version was retired and deleted in Oct 2026; it's stil
 ---
 
 ## Nav Structure (on every page)
-Home · Food · Drinks · Hours · 👕 Merch · 🎁 Gift Cards
+Home · Food · Drinks · Hours · About Us · 👕 Merch · 🎁 Gift Cards
+
+The nav collapses to the hamburger menu at 800px and below (`style.css`). With 7 links it no longer fits between ~640–770px, so don't lower that breakpoint without re-checking.
 
 Each page sets `class="active"` on its own nav link. The nav and footer are copy-pasted across pages (not templated) — `head_foot_truth.html` is the reference copy.
 
