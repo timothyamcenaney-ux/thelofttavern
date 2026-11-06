@@ -59,14 +59,13 @@ The status bar auto-shows open/closed, time until open, countdown, "closing in X
 It refreshes every 60 seconds via `setInterval`.
 
 ### Temporary closures
-Add a date-gated override at the top of `getLoftStatus()` in `hours-status.js`:
-```javascript
-const reopenUTC = new Date('2026-MM-DDTHH:MM:00Z'); // reopen time in UTC
-if (new Date() < reopenUTC) {
-  return { open: false, label: 'Temporarily Closed', sub: closureCountdown(reopenUTC) };
-}
-```
-Remove after reopening. The `closureCountdown()` function shows a live "Opens in X days, Y hr" ticker.
+Edit the `CLOSURE` block near the top of `hours-status.js` (`reopen` in UTC, `reopenLabel`, `banner`, `note`).
+While `new Date() < CLOSURE.reopen` it automatically:
+- shows "Temporarily Closed · Back <date> · in X days, Y hr" in the status bar,
+- adds an amber banner right under the nav (`#closure-banner`),
+- adds a "See you …" note above the hours in every footer and above the grid on `hours.html`.
+
+It switches itself off at `reopen` (regular open/closed logic resumes), so nothing needs cleaning up; delete the block when convenient. The regular hours in `LOFT_HOURS` and the HTML are deliberately left alone during a closure. Reopen time is UTC: 3 PM EST = 20:00Z, 3 PM EDT = 19:00Z.
 
 ---
 

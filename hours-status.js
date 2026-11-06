@@ -20,7 +20,76 @@ const LOFT_HOURS = {
 // Day names for display
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+/**
+ * TEMPORARY CLOSURE — switches itself off at `reopen`, nothing to clean up.
+ * Drives the status bar, the banner under the nav, and the "See you" notes
+ * above the hours. Regular hours above/in the HTML are left untouched.
+ * Set CLOSURE to null (or delete this block) to turn it off early.
+ * `reopen` is in UTC: 3 PM EST (after Nov 1) = 20:00Z; during daylight time use 19:00Z.
+ */
+const CLOSURE = {
+  reopen: new Date('2026-11-12T20:00:00Z'),
+  reopenLabel: 'Thursday, Nov 12 at 3 PM',
+  banner: 'Taking a break... back open November 12',
+  note: 'See you Nov 12',
+};
+
+function closureActive() {
+  return !!CLOSURE && new Date() < CLOSURE.reopen;
+}
+
+function closureCountdown(reopen) {
+  const mins = Math.max(0, Math.floor((reopen - new Date()) / 60000));
+  const d = Math.floor(mins / 1440);
+  const h = Math.floor((mins % 1440) / 60);
+  const m = mins % 60;
+  if (d > 0) return `in ${d} ${d === 1 ? 'day' : 'days'}, ${h} hr`;
+  if (h > 0) return `in ${h} hr ${m} min`;
+  return `in ${m} min`;
+}
+
+function renderClosureNotices() {
+  const active = closureActive();
+  const nav = document.querySelector('nav');
+  let banner = document.getElementById('closure-banner');
+
+  if (!active) {
+    if (banner) banner.remove();
+    document.querySelectorAll('.closure-note').forEach(el => el.remove());
+    return;
+  }
+
+  if (!banner && nav) {
+    banner = document.createElement('div');
+    banner.id = 'closure-banner';
+    banner.textContent = CLOSURE.banner;
+    nav.insertAdjacentElement('afterend', banner);
+  }
+
+  document.querySelectorAll('footer .footer-col').forEach(col => {
+    const h = col.querySelector('h4');
+    if (h && h.textContent.trim() === 'Hours' && !col.querySelector('.closure-note')) {
+      h.insertAdjacentHTML('afterend', `<p class="closure-note closure-note-footer">${CLOSURE.note}</p>`);
+    }
+  });
+
+  const grid = document.querySelector('.hours-grid');
+  if (grid && !document.querySelector('.closure-note-hours')) {
+    grid.insertAdjacentHTML('beforebegin',
+      `<div class="closure-note closure-note-hours"><strong>${CLOSURE.note}</strong>` +
+      `<span>Our regular hours below resume then.</span></div>`);
+  }
+}
+
 function getLoftStatus() {
+  if (closureActive()) {
+    return {
+      open: false,
+      label: 'Temporarily Closed',
+      sub: `Back ${CLOSURE.reopenLabel} · ${closureCountdown(CLOSURE.reopen)}`
+    };
+  }
+
   const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
   const day = now.getDay();
   const hour = now.getHours();
@@ -80,6 +149,7 @@ function fmtTime(h, m) {
 }
 
 function renderStatus() {
+  renderClosureNotices();
   const el = document.getElementById('loft-status-bar');
   if (!el) return;
 
